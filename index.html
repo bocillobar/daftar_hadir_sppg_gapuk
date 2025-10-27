@@ -2,205 +2,207 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Daftar Hadir Relawan SPPG GAPUK</title>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daftar Hadir Relawan SPPG Gapuk</title>
+  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/9/9d/Emblem_of_Indonesia_Garuda_Pancasila.svg" type="image/png">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f7fb;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
       margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      padding: 0;
     }
     .container {
+      max-width: 480px;
+      margin: 60px auto;
       background: #fff;
-      padding: 35px 30px;
-      border-radius: 20px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.08);
-      width: 350px;
+      padding: 40px 30px;
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
       text-align: center;
     }
-    .logo {
-      width: 80px;
-      margin-bottom: 10px;
+    img.logo {
+      width: 70px;
+      margin-bottom: 15px;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0;
+      color: #222;
     }
     h2 {
-      margin: 5px 0 20px;
-      font-size: 1.2rem;
+      font-size: 18px;
+      margin-top: 5px;
+      color: #333;
+      font-weight: 600;
     }
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
+      margin: 8px 0;
       border: 1px solid #ccc;
+      border-radius: 10px;
       font-size: 15px;
-      box-sizing: border-box;
     }
-    textarea {
-      resize: none;
+    select {
+      appearance: none;
+      background-color: #fff;
+      cursor: pointer;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #2563eb;
+      background-color: #2c7be5;
       color: white;
-      font-weight: 600;
+      border: none;
+      padding: 14px;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.2s;
     }
-    button:hover { background: #1e40af; }
-    button:disabled { background: #a0aec0; }
+    button:hover {
+      background-color: #1a68d1;
+    }
     .footer {
+      text-align: center;
       font-size: 13px;
-      color: #6b7280;
+      color: #666;
       margin-top: 20px;
     }
-    .list-box {
-      position: absolute;
-      background: white;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      width: 100%;
+    .footer a {
+      color: #2c7be5;
+      text-decoration: none;
+    }
+    /* Notifikasi tengah */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #222;
+      color: #fff;
+      padding: 20px 25px;
+      border-radius: 12px;
       display: none;
-      z-index: 10;
-      overflow: hidden;
+      font-size: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      z-index: 9999;
     }
-    .list-item {
-      padding: 10px;
-      cursor: pointer;
+    .show {
+      display: block !important;
+      animation: fadeInOut 3s ease-in-out;
     }
-    .list-item:hover {
-      background: #f1f5ff;
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      10%, 90% { opacity: 1; }
+      100% { opacity: 0; }
     }
-    #loading {
-      font-size: 15px;
-      color: #6b7280;
+    datalist {
+      max-height: 300px;
+      overflow-y: auto;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://www.bgn.go.id/BGN_LOGO.png" class="logo" alt="Logo">
-    <h2>DAFTAR HADIR RELAWAN SPPG GAPUK</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Logo_Badan_Gizi_Nasional.png" alt="Badan Gizi Nasional" class="logo">
+    <h1>DAFTAR HADIR</h1>
+    <h2>RELAWAN SPPG GAPUK</h2>
+    <form id="hadirForm">
+      <input list="namaList" id="nama" name="nama" placeholder="Cari nama relawan..." required autocomplete="off">
+      <datalist id="namaList"></datalist>
 
-    <div id="loading">Memuat data relawan...</div>
+      <input type="text" id="jk" name="jk" placeholder="Jenis Kelamin" readonly>
+      <input type="text" id="jabatan" name="jabatan" placeholder="Posisi/Jabatan" readonly>
+      <input type="text" id="nohp" name="nohp" placeholder="Nomor WhatsApp" readonly>
+      <textarea id="catatan" name="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
 
-    <div id="form" style="display:none;">
-      <div style="position:relative;">
-        <input type="text" id="nama" placeholder="Ketik nama relawan..." autocomplete="off">
-        <div id="listBox" class="list-box"></div>
-      </div>
-
-      <input type="text" id="jk" placeholder="Jenis Kelamin" readonly>
-      <input type="text" id="jabatan" placeholder="Posisi / Jabatan" readonly>
-      <input type="text" id="nohp" placeholder="Nomor WhatsApp" readonly>
-      <textarea id="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
-      <button id="kirimBtn" onclick="simpanData()" disabled>Kirim</button>
+      <button type="submit">Kirim</button>
+    </form>
+    <div class="footer">
+      Created by <a href="https://github.com/msrosidi" target="_blank">Muhammad Septi Rosidi</a>
     </div>
-
-    <div class="footer">Created by <a href="https://github.com/muhammadseptirosidi">Muhammad Septi Rosidi</a></div>
   </div>
 
+  <div id="toast" class="toast"></div>
+
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn2H9b0GUBt2dVXoBjDfc-iPz2cb29c5yuE55ObQOERxvV-byEVnICT00Jfp7QpO7xYQ/exec";
-    let relawanList = [];
-    let relawanData = {};
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbEkLIILBvMFcmt6NZJEqIkuQGWpg2NcSNMVtxwi29xgAevgHOQPB41ah5kHPn4ltRPQ/exec";
+    let dataRelawan = {};
 
-    async function loadData() {
+    async function loadRelawan() {
       try {
-        const res = await fetch(SCRIPT_URL + "?action=getDataRelawan");
-        const data = await res.json();
-        relawanList = data.listNama;
-        relawanData = data.dataMap;
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("form").style.display = "block";
-      } catch (e) {
-        document.getElementById("loading").textContent = "Gagal memuat data. Coba refresh.";
-      }
-    }
+        const res = await fetch(`${SCRIPT_URL}?action=getDataRelawan`);
+        const result = await res.json();
+        if (result.status === "success") {
+          const namaList = document.getElementById("namaList");
+          dataRelawan = result.dataMap;
 
-    loadData();
-
-    const namaInput = document.getElementById("nama");
-    const listBox = document.getElementById("listBox");
-    const jkInput = document.getElementById("jk");
-    const jabatanInput = document.getElementById("jabatan");
-    const nohpInput = document.getElementById("nohp");
-    const catatanInput = document.getElementById("catatan");
-    const kirimBtn = document.getElementById("kirimBtn");
-
-    namaInput.addEventListener("input", function() {
-      const val = this.value.toLowerCase();
-      listBox.innerHTML = "";
-      if (!val) return listBox.style.display = "none";
-
-      const filtered = relawanList.filter(n => n.toLowerCase().includes(val));
-      if (!filtered.length) return listBox.style.display = "none";
-
-      filtered.forEach(nama => {
-        const item = document.createElement("div");
-        item.className = "list-item";
-        item.textContent = nama;
-        item.onclick = () => selectNama(nama);
-        listBox.appendChild(item);
-      });
-      listBox.style.display = "block";
-    });
-
-    function selectNama(nama) {
-      namaInput.value = nama;
-      listBox.style.display = "none";
-      const data = relawanData[nama];
-      if (data) {
-        jkInput.value = data.jk || "";
-        jabatanInput.value = data.jabatan || "";
-        nohpInput.value = data.nohp || "";
-        kirimBtn.disabled = false;
-      }
-    }
-
-    document.addEventListener("click", e => {
-      if (!listBox.contains(e.target) && e.target !== namaInput) listBox.style.display = "none";
-    });
-
-    async function simpanData() {
-      kirimBtn.disabled = true;
-      kirimBtn.textContent = "Menyimpan...";
-
-      const formData = new FormData();
-      formData.append("action", "simpanKehadiran");
-      formData.append("nama", namaInput.value);
-      formData.append("jk", jkInput.value);
-      formData.append("jabatan", jabatanInput.value);
-      formData.append("nohp", nohpInput.value);
-      formData.append("catatan", catatanInput.value);
-
-      try {
-        const res = await fetch(SCRIPT_URL, { method: "POST", body: formData });
-        const data = await res.json();
-        Swal.fire({
-          icon: data.status === "success" ? "success" : "error",
-          title: data.status === "success" ? "Berhasil!" : "Gagal!",
-          text: data.message,
-          confirmButtonColor: "#2563eb"
-        });
-        if (data.status === "success") {
-          [namaInput, jkInput, jabatanInput, nohpInput, catatanInput].forEach(e => e.value = "");
-          kirimBtn.disabled = true;
+          result.listNama.forEach(nama => {
+            const opt = document.createElement("option");
+            opt.value = nama;
+            namaList.appendChild(opt);
+          });
+        } else {
+          showToast("Gagal memuat data relawan ❌");
         }
-      } catch {
-        Swal.fire("Gagal", "Tidak dapat mengirim data ke server.", "error");
+      } catch (err) {
+        showToast("Tidak dapat memuat data relawan ❌");
+        console.error(err);
       }
-
-      kirimBtn.disabled = false;
-      kirimBtn.textContent = "Kirim";
     }
+
+    document.getElementById("nama").addEventListener("input", e => {
+      const nama = e.target.value.trim();
+      const data = dataRelawan[nama];
+      if (data) {
+        document.getElementById("jk").value = data["JENIS KELAMIN"] || "";
+        document.getElementById("jabatan").value = data["ALAMAT"] || "";
+        document.getElementById("nohp").value = "";
+      } else {
+        document.getElementById("jk").value = "";
+        document.getElementById("jabatan").value = "";
+        document.getElementById("nohp").value = "";
+      }
+    });
+
+    document.getElementById("hadirForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const formData = {
+        nama: document.getElementById("nama").value,
+        jk: document.getElementById("jk").value,
+        jabatan: document.getElementById("jabatan").value,
+        nohp: document.getElementById("nohp").value,
+        catatan: document.getElementById("catatan").value
+      };
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=simpanKehadiran`, {
+          method: "POST",
+          body: JSON.stringify(formData)
+        });
+        const result = await res.json();
+        if (result.status === "success") {
+          showToast("✅ Data kehadiran berhasil disimpan!");
+          e.target.reset();
+        } else {
+          showToast("❌ Gagal menyimpan data!");
+        }
+      } catch (err) {
+        console.error(err);
+        showToast("Terjadi kesalahan saat mengirim data ❌");
+      }
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.className = "toast show";
+      setTimeout(() => toast.className = "toast", 3000);
+    }
+
+    loadRelawan();
   </script>
 </body>
 </html>
