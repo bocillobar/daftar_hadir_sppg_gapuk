@@ -2,122 +2,216 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Daftar Hadir Relawan SPPG GAPUK</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f6fa;
+      font-family: "Inter", Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
       margin: 0;
-      padding: 30px;
     }
     .container {
-      max-width: 480px;
-      margin: auto;
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
+      background-color: white;
+      padding: 40px;
+      border-radius: 16px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    h2 {
+      max-width: 420px;
+      width: 100%;
       text-align: center;
-      color: #2f3640;
+      position: relative;
     }
-    label { display:block; margin-top:12px; font-weight:bold; }
-    input, textarea, select, button {
-      width:100%; padding:10px; margin-top:5px;
-      border-radius:8px; border:1px solid #ccc; font-size:15px;
+    .header {
+      margin-bottom: 25px;
     }
-    button {
-      background:#00a8ff; color:white; border:none; margin-top:20px;
-      cursor:pointer; font-weight:bold;
+    .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
     }
-    button:hover { background:#0097e6; }
-    #message { text-align:center; margin-top:20px; font-weight:bold; }
+    h1 {
+      font-size: 1.4em;
+      color: #333;
+      margin: 0;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+      position: relative;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+    input[type="text"]:focus, textarea:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0,123,255,0.3);
+    }
+    .input-nama {
+      background-color: #f7f7f7;
+      text-align: center;
+      font-weight: 600;
+      border: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .kirim-button {
+      background: linear-gradient(to bottom, #0099ff, #007bff);
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .kirim-button:hover:not(:disabled) {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .kirim-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    .footer {
+      margin-top: 25px;
+      font-size: 0.8em;
+      color: #888;
+    }
+    .footer a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    .popup {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .popup-content {
+      padding: 20px 30px;
+      border-radius: 12px;
+      font-weight: bold;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .popup-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .popup-error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Daftar Hadir Relawan</h2>
-    <label>Nama Relawan</label>
-    <input type="text" id="nama">
+    <div class="header">
+      <img src="https://www.bgn.go.id/BGN_LOGO.png" class="logo" alt="Logo BGN">
+      <h1>DAFTAR HADIR<br>RELAWAN SPPG GAPUK</h1>
+    </div>
 
-    <label>Jenis Kelamin</label>
-    <input type="text" id="jk" readonly>
+    <form id="attendanceForm">
+      <div class="form-group">
+        <input type="text" id="nama" placeholder="Ketik nama disini..." class="input-nama" required>
+      </div>
+      <div class="form-group">
+        <label for="jk">Jenis Kelamin</label>
+        <input type="text" id="jk" readonly>
+      </div>
+      <div class="form-group">
+        <label for="jabatan">Posisi/Jabatan</label>
+        <input type="text" id="jabatan" readonly>
+      </div>
+      <div class="form-group">
+        <label for="nohp">Nomor WhatsApp</label>
+        <input type="text" id="nohp" readonly>
+      </div>
+      <div class="form-group">
+        <label for="catatan">Catatan (Opsional)</label>
+        <textarea id="catatan" rows="3" placeholder="Tambahkan catatan jika perlu..."></textarea>
+      </div>
+      <button type="submit" id="kirimBtn" class="kirim-button">Kirim</button>
+    </form>
+  </div>
 
-    <label>Jabatan</label>
-    <input type="text" id="jabatan" readonly>
+  <div class="footer">
+    <p>Created by <a href="https://wa.me/6285133371984" target="_blank">Muhammad Septi Rosidi</a></p>
+  </div>
 
-    <label>No HP</label>
-    <input type="text" id="nohp" readonly>
-
-    <label>Catatan</label>
-    <textarea id="catatan"></textarea>
-
-    <button onclick="submitData()">Kirim Kehadiran</button>
-    <p id="message"></p>
+  <div id="popup" class="popup">
+    <div id="popupContent" class="popup-content"></div>
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwb4CnUakfhWfHqNJ1mtuR53mIZBH2W7aGo5nem7Mqn4rdbe3Srvjoe3iOc2kV6KXKBHA/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyUpyxdRdeosGcezftryxrfbdAysd3Np_nytlT2aa8EVWT0CsY0rSXKAyT1qGNZohgIoA/exec";
 
-    let dataRelawanMap = {};
-    let listNamaRelawan = [];
+    document.getElementById("attendanceForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("kirimBtn");
+      btn.disabled = true;
+      btn.textContent = "Mengirim...";
 
-    async function loadData() {
+      const data = {
+        nama: document.getElementById("nama").value,
+        jk: document.getElementById("jk").value,
+        jabatan: document.getElementById("jabatan").value,
+        nohp: document.getElementById("nohp").value,
+        catatan: document.getElementById("catatan").value
+      };
+
       try {
-        const res = await fetch(`${WEB_APP_URL}?action=getDataRelawan`, { method: 'GET', mode: 'cors' });
-        const data = await res.json();
-        listNamaRelawan = data.listNama;
-        dataRelawanMap = data.dataMap;
+        const res = await fetch(scriptURL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        showPopup("success", "✅ Data kehadiran berhasil dikirim!");
+        document.getElementById("attendanceForm").reset();
       } catch (err) {
-        console.error(err);
-        document.getElementById('message').innerText = 'Gagal memuat data relawan.';
+        showPopup("error", "❌ Gagal mengirim data: " + err.message);
       }
-    }
 
-    document.getElementById('nama').addEventListener('change', e => {
-      const nama = e.target.value.trim();
-      if (dataRelawanMap[nama]) {
-        const r = dataRelawanMap[nama];
-        document.getElementById('jk').value = r.jk || '';
-        document.getElementById('jabatan').value = r.jabatan || '';
-        document.getElementById('nohp').value = r.nohp || '';
-      } else {
-        document.getElementById('jk').value = '';
-        document.getElementById('jabatan').value = '';
-        document.getElementById('nohp').value = '';
-      }
+      btn.disabled = false;
+      btn.textContent = "Kirim";
     });
 
-    async function submitData() {
-      const nama = document.getElementById('nama').value.trim();
-      const jk = document.getElementById('jk').value;
-      const jabatan = document.getElementById('jabatan').value;
-      const nohp = document.getElementById('nohp').value;
-      const catatan = document.getElementById('catatan').value.trim();
-
-      if (!nama) {
-        document.getElementById('message').innerText = 'Nama wajib diisi.';
-        return;
-      }
-
-      try {
-        const res = await fetch(WEB_APP_URL, {
-          method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nama, jk, jabatan, nohp, catatan })
-        });
-        const result = await res.json();
-        document.getElementById('message').innerText = result.message || 'Data berhasil dikirim.';
-      } catch (err) {
-        console.error(err);
-        document.getElementById('message').innerText = 'Gagal mengirim data.';
-      }
+    function showPopup(type, message) {
+      const popup = document.getElementById("popup");
+      const popupContent = document.getElementById("popupContent");
+      popupContent.textContent = message;
+      popupContent.className = `popup-content popup-${type}`;
+      popup.style.display = "flex";
+      setTimeout(() => popup.style.display = "none", 2500);
     }
-
-    loadData();
   </script>
 </body>
 </html>
