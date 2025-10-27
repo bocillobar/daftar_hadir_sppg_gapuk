@@ -2,129 +2,122 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar Hadir Relawan SPPG GAPUK</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: "Inter", sans-serif;
-      background-color: #f0f2f5;
-      display: flex;
-      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f6fa;
+      margin: 0;
       padding: 30px;
     }
     .container {
-      background: #fff;
-      border-radius: 16px;
+      max-width: 480px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 30px;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
     }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+    h2 {
+      text-align: center;
+      color: #2f3640;
+    }
+    label { display:block; margin-top:12px; font-weight:bold; }
+    input, textarea, select, button {
+      width:100%; padding:10px; margin-top:5px;
+      border-radius:8px; border:1px solid #ccc; font-size:15px;
     }
     button {
-      background: linear-gradient(to bottom, #0099ff, #007bff);
-      color: white;
-      border: none;
-      border-radius: 25px;
-      padding: 12px;
-      width: 100%;
-      font-size: 1.1em;
-      cursor: pointer;
+      background:#00a8ff; color:white; border:none; margin-top:20px;
+      cursor:pointer; font-weight:bold;
     }
-    .popup {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold;
-      display: none;
-    }
-    .popup.success { background: #28a745; }
-    .popup.error { background: #dc3545; }
+    button:hover { background:#0097e6; }
+    #message { text-align:center; margin-top:20px; font-weight:bold; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Daftar Hadir Relawan</h2>
-    <input type="text" id="nama" placeholder="Ketik nama..." list="listNama">
-    <datalist id="listNama"></datalist>
+    <label>Nama Relawan</label>
+    <input type="text" id="nama">
 
-    <input type="text" id="jk" placeholder="Jenis Kelamin" readonly>
-    <input type="text" id="jabatan" placeholder="Jabatan" readonly>
-    <input type="text" id="nohp" placeholder="Nomor WhatsApp" readonly>
-    <textarea id="catatan" placeholder="Catatan (Opsional)"></textarea>
+    <label>Jenis Kelamin</label>
+    <input type="text" id="jk" readonly>
 
-    <button id="kirimBtn">Kirim</button>
+    <label>Jabatan</label>
+    <input type="text" id="jabatan" readonly>
+
+    <label>No HP</label>
+    <input type="text" id="nohp" readonly>
+
+    <label>Catatan</label>
+    <textarea id="catatan"></textarea>
+
+    <button onclick="submitData()">Kirim Kehadiran</button>
+    <p id="message"></p>
   </div>
 
-  <div id="popup" class="popup"></div>
-
   <script>
-    const WEB_APP_URL = "YOUR_WEB_APP_URL"; // <--- GANTI INI
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwb4CnUakfhWfHqNJ1mtuR53mIZBH2W7aGo5nem7Mqn4rdbe3Srvjoe3iOc2kV6KXKBHA/exec";
 
-    let dataRelawan = {};
+    let dataRelawanMap = {};
+    let listNamaRelawan = [];
 
-    async function loadDataRelawan() {
+    async function loadData() {
       try {
-        const res = await fetch(`${WEB_APP_URL}?action=getDataRelawan`);
-        const result = await res.json();
-        dataRelawan = result.dataMap;
-        const listNama = Object.keys(dataRelawan);
-        const datalist = document.getElementById("listNama");
-        datalist.innerHTML = listNama.map(n => `<option value="${n}">`).join('');
+        const res = await fetch(`${WEB_APP_URL}?action=getDataRelawan`, { method: 'GET', mode: 'cors' });
+        const data = await res.json();
+        listNamaRelawan = data.listNama;
+        dataRelawanMap = data.dataMap;
       } catch (err) {
-        showPopup('error', 'Gagal memuat data relawan');
+        console.error(err);
+        document.getElementById('message').innerText = 'Gagal memuat data relawan.';
       }
     }
 
-    document.getElementById("nama").addEventListener("change", e => {
+    document.getElementById('nama').addEventListener('change', e => {
       const nama = e.target.value.trim();
-      if (dataRelawan[nama]) {
-        const [n, jk, jab, hp] = dataRelawan[nama];
-        document.getElementById("jk").value = jk;
-        document.getElementById("jabatan").value = jab;
-        document.getElementById("nohp").value = hp;
+      if (dataRelawanMap[nama]) {
+        const r = dataRelawanMap[nama];
+        document.getElementById('jk').value = r.jk || '';
+        document.getElementById('jabatan').value = r.jabatan || '';
+        document.getElementById('nohp').value = r.nohp || '';
+      } else {
+        document.getElementById('jk').value = '';
+        document.getElementById('jabatan').value = '';
+        document.getElementById('nohp').value = '';
       }
     });
 
-    document.getElementById("kirimBtn").addEventListener("click", async () => {
-      const nama = document.getElementById("nama").value.trim();
-      const jk = document.getElementById("jk").value;
-      const jabatan = document.getElementById("jabatan").value;
-      const nohp = document.getElementById("nohp").value;
-      const catatan = document.getElementById("catatan").value;
+    async function submitData() {
+      const nama = document.getElementById('nama').value.trim();
+      const jk = document.getElementById('jk').value;
+      const jabatan = document.getElementById('jabatan').value;
+      const nohp = document.getElementById('nohp').value;
+      const catatan = document.getElementById('catatan').value.trim();
 
-      if (!nama || !jabatan || !nohp) {
-        showPopup('error', 'Data tidak lengkap');
+      if (!nama) {
+        document.getElementById('message').innerText = 'Nama wajib diisi.';
         return;
       }
 
       try {
-        const res = await fetch(https://script.google.com/macros/s/AKfycbyUpyxdRdeosGcezftryxrfbdAysd3Np_nytlT2aa8EVWT0CsY0rSXKAyT1qGNZohgIoA/exec, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const res = await fetch(WEB_APP_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nama, jk, jabatan, nohp, catatan })
         });
         const result = await res.json();
-        showPopup(result.status, result.message);
+        document.getElementById('message').innerText = result.message || 'Data berhasil dikirim.';
       } catch (err) {
-        showPopup('error', 'Terjadi kesalahan jaringan');
+        console.error(err);
+        document.getElementById('message').innerText = 'Gagal mengirim data.';
       }
-    });
-
-    function showPopup(type, msg) {
-      const pop = document.getElementById("popup");
-      pop.textContent = msg;
-      pop.className = `popup ${type}`;
-      pop.style.display = "block";
-      setTimeout(() => pop.style.display = "none", 3000);
     }
 
-    loadDataRelawan();
+    loadData();
   </script>
 </body>
 </html>
