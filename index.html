@@ -1,502 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <base target="_top">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Hadir Relawan SPPG GAPUK</title>
+  
   <style>
-    body {
-      font-family: "Inter", Arial, sans-serif;
-      background-color: #f0f2f5;
+    /* Mengatur ulang margin dan padding, serta membuat html/body mengisi layar */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh; /* Mengisi 100% tinggi viewport */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      margin: 0;
+      overflow: hidden; /* Mencegah scroll di halaman utama */
     }
 
-    .container {
-      background-color: white;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      max-width: 420px;
-      width: 100%;
-      box-sizing: border-box; /* Pastikan padding tidak merusak layout */
-      text-align: center;
-      position: relative;
-    }
-
+    /* (Opsional) Header untuk memberi judul di luar iframe */
     .header {
-      margin-bottom: 25px;
-    }
-
-    .logo {
-      width: 100px;
-      height: auto;
-      margin-bottom: 10px;
-    }
-
-    h1 {
-      font-size: 1.4em;
-      color: #333;
-      margin: 0;
-      line-height: 1.3;
-      font-weight: 700;
-    }
-
-    /* ===== INPUT & FORM ===== */
-    .form-group {
-      margin-bottom: 15px;
-      text-align: left;
-      position: relative;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #555;
-    }
-
-    input[type="text"], textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      box-sizing: border-box; /* Pastikan padding tidak merusak layout */
-      font-size: 1em;
-      transition: all 0.3s ease;
-    }
-
-    input[type="text"]:focus, textarea:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0,123,255,0.3);
-    }
-    
-    input[type="text"]:read-only {
-      background-color: #f7f7f7;
-    }
-
-    .input-nama {
-      background-color: #f7f7f7;
+      padding: 1rem;
+      background-color: #ffffff;
       text-align: center;
+      font-size: 1.25rem; /* 20px */
       font-weight: 600;
-      border: none;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      color: #333;
+      border-bottom: 1px solid #e0e0e0;
+      flex-shrink: 0; /* Mencegah header mengecil */
     }
 
-    /* ===== BUTTON ===== */
-    .kirim-button {
-      background: linear-gradient(to bottom, #0099ff, #007bff);
-      color: white;
-      padding: 12px 25px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 1.1em;
-      font-weight: bold;
+    /* Kontainer untuk iframe agar bisa mengisi sisa ruang */
+    .iframe-container {
+      flex-grow: 1; /* Mengambil semua sisa tinggi yang tersedia */
+      overflow: hidden; /* Mencegah scrollbar yang tidak perlu */
+    }
+
+    /* Iframe itu sendiri */
+    iframe {
       width: 100%;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .kirim-button:hover:not(:disabled) {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    .kirim-button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
-
-    .spinner {
-      border: 3px solid #f3f3f3;
-      border-top: 3px solid white;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* ===== AUTOCOMPLETE ===== */
-    .autocomplete-items {
-      position: absolute;
-      z-index: 99;
-      top: 105%;
-      left: 0;
-      right: 0;
-      background: white;
-      border-radius: 10px;
-      overflow-y: auto; /* Tambahkan scroll jika terlalu banyak */
-      max-height: 200px; /* Batasi ketinggian */
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .autocomplete-items div {
-      padding: 10px 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 1px solid #f2f2f2;
-      font-weight: 500;
-    }
-
-    .autocomplete-items div:last-child {
-      border-bottom: none;
-    }
-
-    .autocomplete-items div:hover {
-      background-color: #e8f2ff;
-    }
-
-    .autocomplete-active {
-      background-color: #007bff !important;
-      color: white;
-    }
-
-    /* ===== POPUP ===== */
-    .popup-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.4);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .popup-content {
-      padding: 20px 30px;
-      border-radius: 12px;
-      font-weight: bold;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      max-width: 100%;
-    }
-
-    .popup-success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .popup-error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-
-    .footer {
-      margin-top: 25px;
-      font-size: 0.8em;
-      color: #888;
-      text-align: center;
-    }
-
-    .footer a {
-      color: #007bff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
+      height: 100%;
+      border: none; /* Menghilangkan border iframe */
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <img src="https://www.bgn.go.id/BGN_LOGO.png" class="logo" alt="Logo BGN" onerror="this.style.display='none'">
-      <h1>DAFTAR HADIR<br>RELAWAN SPPG GAPUK</h1>
-    </div>
 
-    <form id="attendanceForm">
-      <div class="form-group">
-        <input type="text" id="nama" placeholder="Ketik nama disini..." class="input-nama" required autocomplete="off">
-        <div id="autocomplete-list" class="autocomplete-items"></div>
-      </div>
+  <!-- (Opsional) Anda bisa menghapus <header>...</header> jika tidak ingin ada judul di atas aplikasi Anda -->
+  <header class="header">
+    Daftar Hadir Relawan SPPG GAPUK
+  </header>
 
-      <div class="form-group">
-        <label for="jk">Jenis Kelamin</label>
-        <input type="text" id="jk" readonly>
-      </div>
+  <!-- Kontainer Utama Aplikasi Anda -->
+  <main class="iframe-container">
+    <iframe 
+      src="https://script.google.com/macros/s/AKfycbyvZRaJIYHQiB5a1g6VpuVkYrSpn7FDioAiQshtNgOgRbfrhu8PnfyJMs7IiFAa9HVQmA/exec"
+      title="Aplikasi Daftar Hadir Relawan SPPG GAPUK">
+      Memuat aplikasi...
+    </iframe>
+  </main>
 
-      <div class="form-group">
-        <label for="jabatan">Posisi/Jabatan</label>
-        <input type="text" id="jabatan" readonly>
-      </div>
-
-      <div class="form-group">
-        <label for="nohp">Nomor WhatsApp</label>
-        <input type="text" id="nohp" readonly>
-      </div>
-
-      <div class="form-group">
-        <label for="catatan">Catatan (Opsional)</label>
-        <textarea id="catatan" rows="3" placeholder="Tambahkan catatan jika perlu..."></textarea>
-      </div>
-
-      <button type="submit" id="kirimBtn" class="kirim-button" disabled>Kirim</button>
-    </form>
-  </div>
-
-  <div class="footer">
-    <p>Created by <a href="https://wa.me/6285133371984" target="_blank" title="Hubungi Kami">Muhammad Septi Rosidi</a></p>
-  </div>
-
-  <div id="popupOverlay" class="popup-overlay">
-    <div id="popupContent" class="popup-content"></div>
-  </div>
-
-  <script>
-    // --- MOCK FOR GITHUB/STANDALONE TESTING ---
-    // 'google.script.run' hanya tersedia saat di-deploy sebagai Google Apps Script Web App.
-    // Objek 'mock' ini mensimulasikan perilakunya untuk pengujian lokal atau GitHub.
-    if (typeof google === 'undefined' || typeof google.script === 'undefined') {
-      console.log("Setting up MOCK for google.script.run");
-      window.google = {
-        script: {
-          run: (function() {
-            let _callback = null;
-
-            // Objek 'handler' yang akan dikembalikan
-            const handler = {
-              withSuccessHandler: function(callback) {
-                _callback = callback;
-                return this; // Kembalikan 'this' agar bisa di-chain (dirantai)
-              },
-
-              // Mock untuk getDataRelawan
-              getDataRelawan: function() {
-                console.log("MOCK: getDataRelawan() called");
-                // Definisikan data mock yang realistis
-                const mockData = {
-                  listNama: ["Ahmad Fauzi", "Budi Santoso", "Cici Paramida", "Dewi Lestari", "Eko Prasetyo", "Fitri Handayani"],
-                  dataMap: {
-                    "Ahmad Fauzi": ["Ahmad Fauzi", "L", "Relawan IT", "081234567890"],
-                    "Budi Santoso": ["Budi Santoso", "L", "Koordinator Lapangan", "081234567891"],
-                    "Cici Paramida": ["Cici Paramida", "P", "Relawan Konsumsi", "081234567892"],
-                    "Dewi Lestari": ["Dewi Lestari", "P", "Relawan Medis", "081234567893"],
-                    "Eko Prasetyo": ["Eko Prasetyo", "L", "Relawan Transportasi", "081234567894"],
-                    "Fitri Handayani": ["Fitri Handayani", "P", "Relawan Administrasi", "081234567895"]
-                  }
-                };
-                
-                // Simulasikan penundaan server
-                setTimeout(() => {
-                  if (_callback) {
-                    console.log("MOCK: Returning mock data to success handler.");
-                    _callback(mockData);
-                    _callback = null; // Reset callback
-                  }
-                }, 500); // penundaan 0.5 detik
-              },
-              
-              // Mock untuk simpanKehadiran
-              simpanKehadiran: function(data) {
-                console.log("MOCK: simpanKehadiran() called with:", data);
-                
-                // Simulasikan pengecekan duplikat
-                if (data.nama === "Ahmad Fauzi") {
-                   setTimeout(() => {
-                    if (_callback) {
-                      _callback({ status: 'error', message: 'Anda sudah mengisi daftar hadir hari ini. (Mock)' });
-                      _callback = null; // Reset callback
-                    }
-                  }, 500);
-                  return;
-                }
-
-                // Simulasikan sukses
-                setTimeout(() => {
-                  if (_callback) {
-                    _callback({ status: 'success', message: '✅ Data kehadiran berhasil disimpan. (Mock)' });
-                    _callback = null; // Reset callback
-                  }
-                }, 1000); // penundaan 1 detik
-              }
-            };
-            
-            // Kembalikan 'handler' untuk mensimulasikan objek 'google.script.run'
-            return handler;
-          }())
-        }
-      };
-    }
-    // --- END OF MOCK ---
-
-    let dataRelawanMap = {};
-    let listNamaRelawan = [];
-    const namaInput = document.getElementById("nama");
-    const jkInput = document.getElementById("jk");
-    const jabatanInput = document.getElementById("jabatan");
-    const nohpInput = document.getElementById("nohp");
-    const kirimBtn = document.getElementById("kirimBtn");
-
-    function loadDataRelawan() {
-      google.script.run.withSuccessHandler(function(result) {
-        listNamaRelawan = result.listNama;
-        dataRelawanMap = result.dataMap;
-        autocomplete(namaInput, listNamaRelawan);
-      }).getDataRelawan();
-    }
-    
-    // Muat data saat jendela dimuat
-    window.addEventListener('load', loadDataRelawan);
-
-    function autocomplete(inp, arr) {
-      let currentFocus;
-      inp.addEventListener("input", function() {
-        let val = this.value;
-        closeAllLists();
-        if (!val) {
-          prefillData(null); // Kosongkan form jika input kosong
-          return false;
-        }
-        currentFocus = -1;
-        let list = document.getElementById("autocomplete-list");
-
-        arr.forEach(item => {
-          // Ubah ke 'includes' untuk pencarian yang lebih luas
-          const matchIndex = item.toUpperCase().indexOf(val.toUpperCase()); 
-          if (matchIndex > -1) {
-            let div = document.createElement("div");
-            // Buat teks yang cocok menjadi tebal
-            const matchEnd = matchIndex + val.length;
-            div.innerHTML = item.substring(0, matchIndex) +
-                            "<strong>" + item.substring(matchIndex, matchEnd) + "</strong>" +
-                            item.substring(matchEnd);
-            
-            div.innerHTML += "<input type='hidden' value='" + item + "'>";
-            div.onclick = function() {
-              inp.value = this.getElementsByTagName("input")[0].value;
-              prefillData(inp.value);
-              closeAllLists();
-            };
-            list.appendChild(div);
-          }
-        });
-      });
-
-      inp.addEventListener("keydown", function(e) {
-        let x = document.getElementById("autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
-        if (!x || x.length === 0) return;
-
-        if (e.keyCode === 40) { // Arrow DOWN
-          currentFocus++; 
-          addActive(x); 
-        } else if (e.keyCode === 38) { // Arrow UP
-          currentFocus--; 
-          addActive(x); 
-        } else if (e.keyCode === 13) { // Enter
-          e.preventDefault();
-          if (currentFocus > -1) {
-             x[currentFocus].click();
-          }
-        }
-      });
-
-      function addActive(x) {
-        if (!x) return false;
-        removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = (x.length - 1);
-        x[currentFocus].classList.add("autocomplete-active");
-      }
-
-      function removeActive(x) {
-        for (let i = 0; i < x.length; i++) {
-          x[i].classList.remove("autocomplete-active");
-        }
-      }
-
-      function closeAllLists(elmnt) {
-        let x = document.getElementById("autocomplete-list");
-        if (!x) return;
-        
-        // Cek jika target klik BUKAN input atau bagian dari daftar
-        if (elmnt !== inp && elmnt !== x) {
-           x.innerHTML = "";
-        }
-      }
-
-      document.addEventListener("click", e => {
-         closeAllLists(e.target);
-      });
-    }
-
-    function prefillData(nama) {
-      const data = nama ? dataRelawanMap[nama.trim()] : null;
-      if (data) {
-        jkInput.value = data[1];
-        jabatanInput.value = data[2];
-        nohpInput.value = data[3];
-        kirimBtn.disabled = false;
-      } else {
-        jkInput.value = '';
-        jabatanInput.value = '';
-        nohpInput.value = '';
-        kirimBtn.disabled = true;
-        // Hanya tampilkan error jika nama diketik tapi tidak ada di map
-        if(nama && !dataRelawanMap[nama.trim()]) { 
-           jabatanInput.value = 'Nama tidak ditemukan';
-           nohpInput.value = 'N/A';
-        }
-      }
-    }
-
-    document.getElementById('attendanceForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const nama = namaInput.value.trim();
-      const jk = jkInput.value;
-      const jabatan = jabatanInput.value;
-      const nohp = nohpInput.value;
-      const catatan = document.getElementById("catatan").value;
-
-      if (!nama || kirimBtn.disabled || jabatan === 'Nama tidak ditemukan') {
-        showPopup('error', 'Silakan pilih nama yang valid dari daftar.');
-        return;
-      }
-
-      kirimBtn.disabled = true;
-      kirimBtn.innerHTML = '<span class="spinner"></span> Mengirim...';
-
-      google.script.run.withSuccessHandler(handleResponse)
-        .simpanKehadiran({ nama, jk, jabatan, nohp, catatan });
-    });
-
-    function handleResponse(result) {
-      kirimBtn.innerHTML = 'Kirim';
-      if (result.status === 'success') {
-        document.getElementById('attendanceForm').reset();
-        prefillData(null); // Kosongkan semua field
-        showPopup('success', result.message);
-      } else {
-        showPopup('error', result.message);
-        kirimBtn.disabled = false; // Aktifkan kembali tombol jika gagal
-      }
-    }
-
-    function showPopup(type, message) {
-      const popupOverlay = document.getElementById('popupOverlay');
-      const popupContent = document.getElementById('popupContent');
-      popupContent.textContent = message;
-      popupContent.className = `popup-content popup-${type}`;
-      popupOverlay.style.display = 'flex';
-      setTimeout(() => popupOverlay.style.display = 'none', 2500);
-    }
-  </script>
 </body>
 </html>
 
