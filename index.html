@@ -1,460 +1,502 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Daftar Hadir — Relawan SPPG GAPUK</title>
-
-  <!-- Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    :root{
-      --bg: #F8FAFC;
-      --card: #ffffff;
-      --muted: #6B7280;
-      --text: #0F172A;
-      --primary: #3B82F6;
-      --primary-600: #2563EB;
-      --shadow: 0 10px 30px rgba(15,23,42,0.08);
-      --radius: 14px;
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
     }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100vh;
-      background:var(--bg);
-      font-family:'Poppins',system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px;
+    .container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 420px;
+      width: 100%;
+      box-sizing: border-box; /* Pastikan padding tidak merusak layout */
+      text-align: center;
+      position: relative;
     }
 
-    .card {
-      width:100%;
-      max-width:520px;
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:34px 36px;
-      position:relative;
+    .header {
+      margin-bottom: 25px;
     }
 
     .logo {
-      display:flex;
-      justify-content:center;
-      margin-bottom:8px;
-    }
-    .logo img {
-      width:72px;
-      height:auto;
-      display:block;
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
     }
 
-    h1{
-      text-align:center;
-      margin:6px 0 4px;
-      font-size:22px;
-      color:var(--text);
-      letter-spacing:0.2px;
-      font-weight:700;
-    }
-    p.lead {
-      text-align:center;
-      margin:0 0 18px;
-      color:var(--muted);
-      font-size:13px;
-      font-weight:600;
+    h1 {
+      font-size: 1.4em;
+      color: #333;
+      margin: 0;
+      line-height: 1.3;
+      font-weight: 700;
     }
 
-    form{margin-top:6px}
-    .field {
-      margin-bottom:14px;
-      position:relative;
+    /* ===== INPUT & FORM ===== */
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
     }
 
     input[type="text"], textarea {
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid #E6E9EE;
-      font-size:15px;
-      color:var(--text);
-      transition:box-shadow .15s, border-color .15s;
-      background: #fff;
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box; /* Pastikan padding tidak merusak layout */
+      font-size: 1em;
+      transition: all 0.3s ease;
     }
 
     input[type="text"]:focus, textarea:focus {
-      outline:none;
-      border-color:var(--primary);
-      box-shadow:0 6px 18px rgba(59,130,246,0.08);
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0,123,255,0.3);
+    }
+    
+    input[type="text"]:read-only {
+      background-color: #f7f7f7;
     }
 
-    textarea {
-      min-height:84px;
-      resize:vertical;
+    .input-nama {
+      background-color: #f7f7f7;
+      text-align: center;
+      font-weight: 600;
+      border: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
-    .btn {
-      display:inline-block;
-      width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      background:var(--primary);
-      color:white;
-      text-align:center;
-      font-weight:700;
-      border:none;
-      cursor:pointer;
-      font-size:15px;
-      box-shadow:0 6px 18px rgba(59,130,246,0.12);
-      transition:transform .08s ease, background .15s;
+    /* ===== BUTTON ===== */
+    .kirim-button {
+      background: linear-gradient(to bottom, #0099ff, #007bff);
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      width: 100%;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
-    .btn:active{ transform: translateY(1px); }
-    .btn[disabled]{ background:#9CA3AF; cursor:not-allowed; box-shadow:none; }
+
+    .kirim-button:hover:not(:disabled) {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .kirim-button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ===== AUTOCOMPLETE ===== */
+    .autocomplete-items {
+      position: absolute;
+      z-index: 99;
+      top: 105%;
+      left: 0;
+      right: 0;
+      background: white;
+      border-radius: 10px;
+      overflow-y: auto; /* Tambahkan scroll jika terlalu banyak */
+      max-height: 200px; /* Batasi ketinggian */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .autocomplete-items div {
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 1px solid #f2f2f2;
+      font-weight: 500;
+    }
+
+    .autocomplete-items div:last-child {
+      border-bottom: none;
+    }
+
+    .autocomplete-items div:hover {
+      background-color: #e8f2ff;
+    }
+
+    .autocomplete-active {
+      background-color: #007bff !important;
+      color: white;
+    }
+
+    /* ===== POPUP ===== */
+    .popup-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .popup-content {
+      padding: 20px 30px;
+      border-radius: 12px;
+      font-weight: bold;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      max-width: 100%;
+    }
+
+    .popup-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .popup-error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
 
     .footer {
-      margin-top:18px;
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
+      margin-top: 25px;
+      font-size: 0.8em;
+      color: #888;
+      text-align: center;
     }
-    .footer a{ color:var(--primary-600); text-decoration:none; font-weight:600; }
 
-    /* Autocomplete list (no scrollbar) */
-    .list {
-      position:absolute;
-      left:0;
-      right:0;
-      top:calc(100% + 8px);
-      background:#fff;
-      border-radius:10px;
-      border:1px solid #E6E9EE;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.08);
-      z-index:40;
-      overflow:visible; /* no scroll */
-      display:none;
+    .footer a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
     }
-    .list.show { display:block; }
 
-    .list .item {
-      padding:12px 14px;
-      cursor:pointer;
-      text-align:left;
-      font-weight:600;
-      color:var(--text);
-      transition:background .12s;
-    }
-    .list .item:hover, .list .item.active { background:#F1F5FF; }
-
-    /* center toast/modal */
-    .toast {
-      position:fixed;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      pointer-events:none;
-      z-index:9999;
-    }
-    .toast .box {
-      pointer-events:auto;
-      min-width:240px;
-      max-width:90%;
-      background:#0F172A;
-      color:#fff;
-      padding:16px 20px;
-      border-radius:12px;
-      box-shadow:0 10px 30px rgba(2,6,23,0.4);
-      text-align:center;
-      font-weight:600;
-    }
-    .toast.hide { display:none; }
-
-    /* spinner small */
-    .spinner {
-      display:inline-block;
-      width:18px;
-      height:18px;
-      border-radius:50%;
-      border:3px solid rgba(255,255,255,0.2);
-      border-top-color:rgba(255,255,255,0.95);
-      animation:spin 1s linear infinite;
-      vertical-align:middle;
-      margin-right:8px;
-    }
-    @keyframes spin { to{ transform:rotate(360deg);} }
-
-    /* responsive */
-    @media (max-width:520px){
-      body{ padding:18px }
-      .card { padding:22px; border-radius:12px; }
+    .footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="card" role="main" aria-labelledby="title">
-    <div class="logo" aria-hidden="true">
-      <!-- If logo fails to load, alt text still present -->
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_Badan_Gizi_Nasional.svg/512px-Logo_Badan_Gizi_Nasional.svg.png" alt="Badan Gizi Nasional">
+  <div class="container">
+    <div class="header">
+      <img src="https://www.bgn.go.id/BGN_LOGO.png" class="logo" alt="Logo BGN" onerror="this.style.display='none'">
+      <h1>DAFTAR HADIR<br>RELAWAN SPPG GAPUK</h1>
     </div>
 
-    <h1 id="title">DAFTAR HADIR</h1>
-    <p class="lead">RELAWAN SPPG GAPUK</p>
-
-    <form id="form">
-      <div class="field" style="margin-top:2px;">
-        <input id="nama" type="text" placeholder="Ketik nama relawan..." aria-label="Nama relawan" autocomplete="off" />
-        <div id="list" class="list" role="listbox" aria-label="Daftar nama"></div>
+    <form id="attendanceForm">
+      <div class="form-group">
+        <input type="text" id="nama" placeholder="Ketik nama disini..." class="input-nama" required autocomplete="off">
+        <div id="autocomplete-list" class="autocomplete-items"></div>
       </div>
 
-      <div class="field">
-        <input id="jenisKelamin" type="text" placeholder="Jenis Kelamin" readonly aria-readonly="true" />
+      <div class="form-group">
+        <label for="jk">Jenis Kelamin</label>
+        <input type="text" id="jk" readonly>
       </div>
 
-      <div class="field">
-        <input id="posisi" type="text" placeholder="Posisi / Jabatan" readonly aria-readonly="true" />
+      <div class="form-group">
+        <label for="jabatan">Posisi/Jabatan</label>
+        <input type="text" id="jabatan" readonly>
       </div>
 
-      <div class="field">
-        <input id="nomor" type="text" placeholder="Nomor WhatsApp" readonly aria-readonly="true" />
+      <div class="form-group">
+        <label for="nohp">Nomor WhatsApp</label>
+        <input type="text" id="nohp" readonly>
       </div>
 
-      <div class="field">
-        <textarea id="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
+      <div class="form-group">
+        <label for="catatan">Catatan (Opsional)</label>
+        <textarea id="catatan" rows="3" placeholder="Tambahkan catatan jika perlu..."></textarea>
       </div>
 
-      <div class="field">
-        <button id="submit" class="btn" type="submit" disabled><span id="btnText">Kirim</span></button>
-      </div>
+      <button type="submit" id="kirimBtn" class="kirim-button" disabled>Kirim</button>
     </form>
-
-    <div class="footer">Created by <a href="https://github.com/bocillobar" target="_blank" rel="noopener">Muhammad Septi Rosidi</a></div>
   </div>
 
-  <!-- Toast / Mid-screen notification -->
-  <div id="toast" class="toast hide" aria-live="polite">
-    <div class="box" id="toastText">Pesan</div>
+  <div class="footer">
+    <p>Created by <a href="https://wa.me/6285133371984" target="_blank" title="Hubungi Kami">Muhammad Septi Rosidi</a></p>
+  </div>
+
+  <div id="popupOverlay" class="popup-overlay">
+    <div id="popupContent" class="popup-content"></div>
   </div>
 
   <script>
-    // ------------- CONFIG -------------
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxu_ygXGZp0-E17n2EvJdzgc3y073p9So7vCjb8qBAiEIM1MGu-JLdHkDexVe0h4Wfgrw/exec";
-    // ----------------------------------
+    // --- MOCK FOR GITHUB/STANDALONE TESTING ---
+    // 'google.script.run' hanya tersedia saat di-deploy sebagai Google Apps Script Web App.
+    // Objek 'mock' ini mensimulasikan perilakunya untuk pengujian lokal atau GitHub.
+    if (typeof google === 'undefined' || typeof google.script === 'undefined') {
+      console.log("Setting up MOCK for google.script.run");
+      window.google = {
+        script: {
+          run: (function() {
+            let _callback = null;
 
-    // Elements
-    const namaEl = document.getElementById('nama');
-    const listEl = document.getElementById('list');
-    const jkEl = document.getElementById('jenisKelamin');
-    const posisiEl = document.getElementById('posisi');
-    const nomorEl = document.getElementById('nomor');
-    const catatanEl = document.getElementById('catatan');
-    const submitBtn = document.getElementById('submit');
-    const btnText = document.getElementById('btnText');
-    const toast = document.getElementById('toast');
-    const toastText = document.getElementById('toastText');
+            // Objek 'handler' yang akan dikembalikan
+            const handler = {
+              withSuccessHandler: function(callback) {
+                _callback = callback;
+                return this; // Kembalikan 'this' agar bisa di-chain (dirantai)
+              },
 
-    let relawanList = [];     // array of names
-    let relawanMap = {};      // name -> object (headers -> values)
-    let filtered = [];        // filtered names currently displayed
-    let activeIndex = -1;     // for keyboard nav
+              // Mock untuk getDataRelawan
+              getDataRelawan: function() {
+                console.log("MOCK: getDataRelawan() called");
+                // Definisikan data mock yang realistis
+                const mockData = {
+                  listNama: ["Ahmad Fauzi", "Budi Santoso", "Cici Paramida", "Dewi Lestari", "Eko Prasetyo", "Fitri Handayani"],
+                  dataMap: {
+                    "Ahmad Fauzi": ["Ahmad Fauzi", "L", "Relawan IT", "081234567890"],
+                    "Budi Santoso": ["Budi Santoso", "L", "Koordinator Lapangan", "081234567891"],
+                    "Cici Paramida": ["Cici Paramida", "P", "Relawan Konsumsi", "081234567892"],
+                    "Dewi Lestari": ["Dewi Lestari", "P", "Relawan Medis", "081234567893"],
+                    "Eko Prasetyo": ["Eko Prasetyo", "L", "Relawan Transportasi", "081234567894"],
+                    "Fitri Handayani": ["Fitri Handayani", "P", "Relawan Administrasi", "081234567895"]
+                  }
+                };
+                
+                // Simulasikan penundaan server
+                setTimeout(() => {
+                  if (_callback) {
+                    console.log("MOCK: Returning mock data to success handler.");
+                    _callback(mockData);
+                    _callback = null; // Reset callback
+                  }
+                }, 500); // penundaan 0.5 detik
+              },
+              
+              // Mock untuk simpanKehadiran
+              simpanKehadiran: function(data) {
+                console.log("MOCK: simpanKehadiran() called with:", data);
+                
+                // Simulasikan pengecekan duplikat
+                if (data.nama === "Ahmad Fauzi") {
+                   setTimeout(() => {
+                    if (_callback) {
+                      _callback({ status: 'error', message: 'Anda sudah mengisi daftar hadir hari ini. (Mock)' });
+                      _callback = null; // Reset callback
+                    }
+                  }, 500);
+                  return;
+                }
 
-    // Helper: show toast
-    function showToast(message, duration = 2500) {
-      toastText.textContent = message;
-      toast.classList.remove('hide');
-      setTimeout(() => toast.classList.add('hide'), duration);
-    }
-
-    // Helper: safe field extractor (tolerant to header variations)
-    function getField(obj, keywords) {
-      if (!obj) return null;
-      const keys = Object.keys(obj);
-      const kLower = keys.map(k => k.toLowerCase());
-      for (const kw of keywords) {
-        const idx = kLower.findIndex(k => k.includes(kw));
-        if (idx !== -1) return obj[keys[idx]];
-      }
-      return null;
-    }
-
-    // Load data from Apps Script
-    async function loadData() {
-      // show small temporary placeholder while loading
-      namaEl.placeholder = 'Memuat daftar relawan...';
-      try {
-        const res = await fetch(`${SCRIPT_URL}?action=getDataRelawan`, {cache: "no-store"});
-        const data = await res.json();
-        if (!data || data.status !== 'success') {
-          console.error('loadData error', data);
-          namaEl.placeholder = 'Gagal memuat daftar — refresh';
-          showToast('Gagal memuat data relawan');
-          return;
+                // Simulasikan sukses
+                setTimeout(() => {
+                  if (_callback) {
+                    _callback({ status: 'success', message: '✅ Data kehadiran berhasil disimpan. (Mock)' });
+                    _callback = null; // Reset callback
+                  }
+                }, 1000); // penundaan 1 detik
+              }
+            };
+            
+            // Kembalikan 'handler' untuk mensimulasikan objek 'google.script.run'
+            return handler;
+          }())
         }
-
-        // Expect data.listNama (array) and data.dataMap (object)
-        relawanList = Array.isArray(data.listNama) ? data.listNama.slice() : [];
-        relawanMap = data.dataMap || {};
-        namaEl.placeholder = 'Ketik nama relawan...';
-      } catch (err) {
-        console.error(err);
-        namaEl.placeholder = 'Gagal memuat daftar — refresh';
-        showToast('Tidak dapat mengambil data relawan');
-      }
-    }
-
-    // Render filtered list (no scrollbar)
-    function renderList(names) {
-      listEl.innerHTML = '';
-      if (!names || names.length === 0) {
-        listEl.classList.remove('show');
-        return;
-      }
-      activeIndex = -1;
-      names.forEach((n, i) => {
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.textContent = n;
-        div.dataset.index = i;
-        div.addEventListener('click', () => selectByIndex(i));
-        listEl.appendChild(div);
-      });
-      // Show list
-      listEl.classList.add('show');
-      // Make sure list sits above other elements (no scroll intentionally)
-    }
-
-    // Select an item
-    function selectByIndex(i) {
-      const name = filtered[i];
-      if (!name) return;
-      namaEl.value = name;
-      listEl.classList.remove('show');
-      prefill(name);
-    }
-
-    // Prefill fields from relawanMap; tolerant header lookup
-    function prefill(name) {
-      const record = relawanMap[name] || {};
-      // common header keywords:
-      const jk = getField(record, ['jenis kelamin', 'jenis_kelamin', 'jk', 'gender']);
-      const jab = getField(record, ['jabatan','posisi','posisi/jabatan','posisi_jabatan','bagian']);
-      const phone = getField(record, ['whatsapp','nomor','no hp','no_hp','nomor whatsapp','nomor_whatsapp','hp']);
-
-      jkEl.value = jk || '';
-      posisiEl.value = jab || '';
-      // phone may contain dots or weird formatting; convert to string
-      nomorEl.value = phone ? String(phone) : '';
-      // enable submit only if we have a valid matched entry
-      submitBtn.disabled = !(name && (jk || jab || phone));
-    }
-
-    // Keyboard nav
-    namaEl.addEventListener('keydown', (ev) => {
-      const items = listEl.querySelectorAll('.item');
-      if (listEl.classList.contains('show')) {
-        if (ev.key === 'ArrowDown') {
-          ev.preventDefault();
-          activeIndex = Math.min(activeIndex + 1, items.length - 1);
-          updateActive(items);
-        } else if (ev.key === 'ArrowUp') {
-          ev.preventDefault();
-          activeIndex = Math.max(activeIndex - 1, 0);
-          updateActive(items);
-        } else if (ev.key === 'Enter') {
-          ev.preventDefault();
-          if (activeIndex >= 0) selectByIndex(activeIndex);
-        } else if (ev.key === 'Escape') {
-          listEl.classList.remove('show');
-        }
-      }
-    });
-
-    function updateActive(items) {
-      items.forEach((it, idx) => it.classList.toggle('active', idx === activeIndex));
-      // ensure active visible (we purposely disable scrollbar — so we won't scroll)
-    }
-
-    // Autocomplete on input
-    namaEl.addEventListener('input', () => {
-      const q = namaEl.value.trim().toLowerCase();
-      if (!q) {
-        listEl.classList.remove('show');
-        submitBtn.disabled = true;
-        return;
-      }
-      filtered = relawanList.filter(n => n.toLowerCase().includes(q));
-      // show limited number visually but no scrollbar: we still place all items
-      renderList(filtered);
-    });
-
-    // Close list clicking outside
-    document.addEventListener('click', (ev) => {
-      if (!listEl.contains(ev.target) && ev.target !== namaEl) {
-        listEl.classList.remove('show');
-      }
-    });
-
-    // Submit handler (POST JSON)
-    document.getElementById('form').addEventListener('submit', async (ev) => {
-      ev.preventDefault();
-      const nama = namaEl.value.trim();
-      if (!nama) return showToast('Silakan pilih nama valid dari daftar');
-
-      // build data payload mapping to server expected keys
-      const payload = {
-        nama,
-        jenisKelamin: jkEl.value || '',
-        posisi: posisiEl.value || '',
-        nomorWA: nomorEl.value || '',
-        catatan: catatanEl.value || ''
       };
+    }
+    // --- END OF MOCK ---
 
-      // disable button + spinner
-      submitBtn.disabled = true;
-      btnText.innerHTML = '<span class="spinner" aria-hidden="true"></span> Mengirim...';
+    let dataRelawanMap = {};
+    let listNamaRelawan = [];
+    const namaInput = document.getElementById("nama");
+    const jkInput = document.getElementById("jk");
+    const jabatanInput = document.getElementById("jabatan");
+    const nohpInput = document.getElementById("nohp");
+    const kirimBtn = document.getElementById("kirimBtn");
 
-      try {
-        const res = await fetch(SCRIPT_URL + '?action=simpanKehadiran', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const j = await res.json();
-        if (j && j.status === 'success') {
-          showToast('✅ Data kehadiran berhasil disimpan!');
-          // reset form except keep loaded list
-          namaEl.value = '';
-          jkEl.value = '';
-          posisiEl.value = '';
-          nomorEl.value = '';
-          catatanEl.value = '';
-          submitBtn.disabled = true;
-        } else {
-          console.error('save error', j);
-          showToast(j && j.message ? j.message : 'Gagal menyimpan data');
-          submitBtn.disabled = false;
+    function loadDataRelawan() {
+      google.script.run.withSuccessHandler(function(result) {
+        listNamaRelawan = result.listNama;
+        dataRelawanMap = result.dataMap;
+        autocomplete(namaInput, listNamaRelawan);
+      }).getDataRelawan();
+    }
+    
+    // Muat data saat jendela dimuat
+    window.addEventListener('load', loadDataRelawan);
+
+    function autocomplete(inp, arr) {
+      let currentFocus;
+      inp.addEventListener("input", function() {
+        let val = this.value;
+        closeAllLists();
+        if (!val) {
+          prefillData(null); // Kosongkan form jika input kosong
+          return false;
         }
-      } catch (err) {
-        console.error(err);
-        showToast('Terjadi kesalahan saat mengirim data');
-        submitBtn.disabled = false;
-      } finally {
-        btnText.textContent = 'Kirim';
+        currentFocus = -1;
+        let list = document.getElementById("autocomplete-list");
+
+        arr.forEach(item => {
+          // Ubah ke 'includes' untuk pencarian yang lebih luas
+          const matchIndex = item.toUpperCase().indexOf(val.toUpperCase()); 
+          if (matchIndex > -1) {
+            let div = document.createElement("div");
+            // Buat teks yang cocok menjadi tebal
+            const matchEnd = matchIndex + val.length;
+            div.innerHTML = item.substring(0, matchIndex) +
+                            "<strong>" + item.substring(matchIndex, matchEnd) + "</strong>" +
+                            item.substring(matchEnd);
+            
+            div.innerHTML += "<input type='hidden' value='" + item + "'>";
+            div.onclick = function() {
+              inp.value = this.getElementsByTagName("input")[0].value;
+              prefillData(inp.value);
+              closeAllLists();
+            };
+            list.appendChild(div);
+          }
+        });
+      });
+
+      inp.addEventListener("keydown", function(e) {
+        let x = document.getElementById("autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (!x || x.length === 0) return;
+
+        if (e.keyCode === 40) { // Arrow DOWN
+          currentFocus++; 
+          addActive(x); 
+        } else if (e.keyCode === 38) { // Arrow UP
+          currentFocus--; 
+          addActive(x); 
+        } else if (e.keyCode === 13) { // Enter
+          e.preventDefault();
+          if (currentFocus > -1) {
+             x[currentFocus].click();
+          }
+        }
+      });
+
+      function addActive(x) {
+        if (!x) return false;
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        x[currentFocus].classList.add("autocomplete-active");
       }
+
+      function removeActive(x) {
+        for (let i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
+      }
+
+      function closeAllLists(elmnt) {
+        let x = document.getElementById("autocomplete-list");
+        if (!x) return;
+        
+        // Cek jika target klik BUKAN input atau bagian dari daftar
+        if (elmnt !== inp && elmnt !== x) {
+           x.innerHTML = "";
+        }
+      }
+
+      document.addEventListener("click", e => {
+         closeAllLists(e.target);
+      });
+    }
+
+    function prefillData(nama) {
+      const data = nama ? dataRelawanMap[nama.trim()] : null;
+      if (data) {
+        jkInput.value = data[1];
+        jabatanInput.value = data[2];
+        nohpInput.value = data[3];
+        kirimBtn.disabled = false;
+      } else {
+        jkInput.value = '';
+        jabatanInput.value = '';
+        nohpInput.value = '';
+        kirimBtn.disabled = true;
+        // Hanya tampilkan error jika nama diketik tapi tidak ada di map
+        if(nama && !dataRelawanMap[nama.trim()]) { 
+           jabatanInput.value = 'Nama tidak ditemukan';
+           nohpInput.value = 'N/A';
+        }
+      }
+    }
+
+    document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nama = namaInput.value.trim();
+      const jk = jkInput.value;
+      const jabatan = jabatanInput.value;
+      const nohp = nohpInput.value;
+      const catatan = document.getElementById("catatan").value;
+
+      if (!nama || kirimBtn.disabled || jabatan === 'Nama tidak ditemukan') {
+        showPopup('error', 'Silakan pilih nama yang valid dari daftar.');
+        return;
+      }
+
+      kirimBtn.disabled = true;
+      kirimBtn.innerHTML = '<span class="spinner"></span> Mengirim...';
+
+      google.script.run.withSuccessHandler(handleResponse)
+        .simpanKehadiran({ nama, jk, jabatan, nohp, catatan });
     });
 
-    // initialize
-    (async function init(){
-      submitBtn.disabled = true;
-      await loadData();
-      // small UX: when data ready, focus on name input
-      namaEl.focus();
-    })();
+    function handleResponse(result) {
+      kirimBtn.innerHTML = 'Kirim';
+      if (result.status === 'success') {
+        document.getElementById('attendanceForm').reset();
+        prefillData(null); // Kosongkan semua field
+        showPopup('success', result.message);
+      } else {
+        showPopup('error', result.message);
+        kirimBtn.disabled = false; // Aktifkan kembali tombol jika gagal
+      }
+    }
+
+    function showPopup(type, message) {
+      const popupOverlay = document.getElementById('popupOverlay');
+      const popupContent = document.getElementById('popupContent');
+      popupContent.textContent = message;
+      popupContent.className = `popup-content popup-${type}`;
+      popupOverlay.style.display = 'flex';
+      setTimeout(() => popupOverlay.style.display = 'none', 2500);
+    }
   </script>
 </body>
 </html>
+
