@@ -4,270 +4,235 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Daftar Hadir Relawan SPPG GAPUK</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f5f6fa;
+      background: #f4f6fb;
       margin: 0;
-      padding: 30px;
+      padding: 0;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
+      min-height: 100vh;
     }
 
     .container {
-      background-color: #fff;
-      padding: 40px 30px;
+      background: #fff;
+      padding: 40px 35px;
       border-radius: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      max-width: 420px;
-      width: 100%;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+      width: 360px;
       text-align: center;
     }
 
-    .header {
-      margin-bottom: 20px;
-    }
-
     .logo {
-      width: 100px;
-      height: auto;
+      width: 80px;
       margin-bottom: 10px;
     }
 
-    h1 {
-      font-size: 1.3em;
-      margin: 0;
-      line-height: 1.4;
-      color: #222;
+    h2 {
+      font-size: 1.3rem;
+      margin: 8px 0 25px;
+      font-weight: 700;
+      color: #111827;
     }
 
-    .form-group {
-      margin-bottom: 18px;
-      text-align: left;
-      position: relative;
-    }
-
-    label {
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 5px;
-      display: block;
-    }
-
-    input[type="text"], textarea {
+    input, textarea {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ccc;
+      padding: 12px;
       border-radius: 10px;
-      font-size: 1em;
-      transition: all 0.3s ease;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      font-size: 15px;
       box-sizing: border-box;
+      transition: all 0.2s ease;
     }
 
-    input[type="text"]:focus, textarea:focus {
-      border-color: #007bff;
+    input:focus, textarea:focus {
       outline: none;
-      box-shadow: 0 0 6px rgba(0,123,255,0.3);
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
     }
 
     textarea {
       resize: none;
     }
 
-    #nama {
-      background-color: #f8f9fa;
-      font-weight: bold;
-    }
-
-    .autocomplete-list {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border: 1px solid #ccc;
-      border-top: none;
-      border-radius: 0 0 8px 8px;
-      z-index: 10;
-      max-height: 150px;
-      overflow-y: auto;
-    }
-
-    .autocomplete-item {
-      padding: 8px 12px;
-      cursor: pointer;
-    }
-
-    .autocomplete-item:hover {
-      background-color: #f0f0f0;
-    }
-
-    .kirim-button {
-      background: linear-gradient(to bottom, #0099ff, #007bff);
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      font-size: 1.1em;
-      font-weight: bold;
-      border-radius: 30px;
-      cursor: pointer;
+    button {
       width: 100%;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
 
-    .kirim-button:hover:not(:disabled) {
-      opacity: 0.9;
-      transform: translateY(-1px);
+    button:hover {
+      background: #1e4ed8;
     }
 
-    .kirim-button:disabled {
-      background: #ccc;
+    button:disabled {
+      background: #9ca3af;
       cursor: not-allowed;
     }
 
+    .list-box {
+      position: absolute;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 100%;
+      overflow: hidden; /* no scroll */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 100;
+    }
+
+    .list-item {
+      padding: 10px 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.2s;
+    }
+
+    .list-item:hover {
+      background: #f1f5ff;
+    }
+
     .footer {
-      margin-top: 25px;
-      color: #888;
-      font-size: 0.85em;
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 20px;
     }
 
     .footer a {
-      color: #007bff;
+      color: #2563eb;
       text-decoration: none;
-      font-weight: bold;
-    }
-
-    .popup {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .popup-content {
-      background: white;
-      padding: 25px 30px;
-      border-radius: 15px;
-      font-weight: bold;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-
-    .popup-success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-
-    .popup-error {
-      background-color: #f8d7da;
-      color: #721c24;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <img src="https://www.bgn.go.id/BGN_LOGO.png" class="logo" alt="Logo">
+    <h2>DAFTAR HADIR<br>RELAWAN SPPG GAPUK</h2>
 
+    <div style="position:relative;">
+      <input type="text" id="nama" placeholder="Ketik nama relawan..." autocomplete="off">
+      <div id="listBox" class="list-box"></div>
+    </div>
+
+    <input type="text" id="jk" placeholder="Jenis Kelamin" readonly>
+    <input type="text" id="jabatan" placeholder="Posisi / Jabatan" readonly>
+    <input type="text" id="nohp" placeholder="Nomor WhatsApp" readonly>
+    <textarea id="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
+    <button id="kirimBtn" onclick="simpanData()" disabled>Kirim</button>
+
+    <div class="footer">
+      Created by <a href="https://github.com/muhammadseptirosidi" target="_blank">Muhammad Septi Rosidi</a>
+    </div>
+  </div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbzWpAkOtnwpFApAoLSOMtKlKwnEIcakr4B8eU335c8Rzvx3XGNLvGTEAZwrW0JRHGzllg/exec";
-    let relawanData = [];
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWpAkOtnwpFApAoLSOMtKlKwnEIcakr4B8eU335c8Rzvx3XGNLvGTEAZwrW0JRHGzllg/exec";
 
-    // --- Ambil Data Relawan ---
-    async function loadRelawan() {
+    let relawanList = [];
+    let relawanData = {};
+
+    async function loadData() {
       try {
-        const res = await fetch(scriptURL + "?action=getRelawan");
-        relawanData = await res.json();
+        const res = await fetch(SCRIPT_URL + "?action=getDataRelawan");
+        const data = await res.json();
+        relawanList = data.listNama;
+        relawanData = data.dataMap;
       } catch (e) {
-        console.error("Gagal ambil data relawan:", e);
+        Swal.fire("Gagal", "Tidak dapat memuat data relawan.", "error");
       }
     }
 
-    // --- Autocomplete ---
+    loadData();
+
     const namaInput = document.getElementById("nama");
-    const autocompleteDiv = document.getElementById("autocomplete");
+    const listBox = document.getElementById("listBox");
+    const jkInput = document.getElementById("jk");
+    const jabatanInput = document.getElementById("jabatan");
+    const nohpInput = document.getElementById("nohp");
+    const catatanInput = document.getElementById("catatan");
+    const kirimBtn = document.getElementById("kirimBtn");
 
-    namaInput.addEventListener("input", () => {
-      const val = namaInput.value.toLowerCase();
-      autocompleteDiv.innerHTML = "";
+    namaInput.addEventListener("input", function() {
+      const val = this.value.toLowerCase();
+      listBox.innerHTML = "";
+      if (!val) return listBox.style.display = "none";
 
-      if (!val) return;
+      const filtered = relawanList.filter(n => n.toLowerCase().includes(val));
+      if (filtered.length === 0) return listBox.style.display = "none";
 
-      const filtered = relawanData.filter(r => r.nama.toLowerCase().includes(val));
-
-      filtered.forEach(r => {
+      filtered.forEach(nama => {
         const item = document.createElement("div");
-        item.classList.add("autocomplete-item");
-        item.textContent = r.nama;
-        item.addEventListener("click", () => {
-          namaInput.value = r.nama;
-          document.getElementById("jk").value = r.jk || "";
-          document.getElementById("jabatan").value = r.jabatan || "";
-          document.getElementById("nohp").value = r.nohp || "";
-          autocompleteDiv.innerHTML = "";
-        });
-        autocompleteDiv.appendChild(item);
+        item.className = "list-item";
+        item.textContent = nama;
+        item.onclick = () => selectNama(nama);
+        listBox.appendChild(item);
       });
+      listBox.style.display = "block";
     });
+
+    function selectNama(nama) {
+      namaInput.value = nama;
+      listBox.style.display = "none";
+      const data = relawanData[nama];
+      if (data) {
+        jkInput.value = data.jk || "";
+        jabatanInput.value = data.jabatan || "";
+        nohpInput.value = data.nohp || "";
+        kirimBtn.disabled = false;
+      }
+    }
 
     document.addEventListener("click", (e) => {
-      if (!autocompleteDiv.contains(e.target) && e.target !== namaInput) {
-        autocompleteDiv.innerHTML = "";
+      if (!listBox.contains(e.target) && e.target !== namaInput) {
+        listBox.style.display = "none";
       }
     });
 
-    // --- Submit Form ---
-    document.getElementById("attendanceForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById("kirimBtn");
-      btn.disabled = true;
-      btn.textContent = "Mengirim...";
+    async function simpanData() {
+      kirimBtn.disabled = true;
+      kirimBtn.textContent = "Menyimpan...";
 
-      const data = {
-        nama: namaInput.value,
-        jk: document.getElementById("jk").value,
-        jabatan: document.getElementById("jabatan").value,
-        nohp: document.getElementById("nohp").value,
-        catatan: document.getElementById("catatan").value
-      };
+      const formData = new FormData();
+      formData.append("action", "simpanKehadiran");
+      formData.append("nama", namaInput.value);
+      formData.append("jk", jkInput.value);
+      formData.append("jabatan", jabatanInput.value);
+      formData.append("nohp", nohpInput.value);
+      formData.append("catatan", catatanInput.value);
 
       try {
-        await fetch(scriptURL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: formData });
+        const data = await res.json();
+        Swal.fire({
+          icon: data.status === "success" ? "success" : "error",
+          title: data.status === "success" ? "Berhasil!" : "Gagal",
+          text: data.message,
+          confirmButtonColor: "#2563eb"
         });
-        showPopup("success", "✅ Kehadiran berhasil dikirim!");
-        document.getElementById("attendanceForm").reset();
-      } catch (err) {
-        showPopup("error", "❌ Gagal kirim data: " + err.message);
+
+        if (data.status === "success") {
+          [namaInput, jkInput, jabatanInput, nohpInput, catatanInput].forEach(el => el.value = "");
+          kirimBtn.disabled = true;
+        }
+      } catch (e) {
+        Swal.fire("Gagal", "Terjadi kesalahan saat mengirim data.", "error");
       }
 
-      btn.disabled = false;
-      btn.textContent = "Kirim";
-    });
-
-    // --- Popup ---
-    function showPopup(type, message) {
-      const popup = document.getElementById("popup");
-      const popupContent = document.getElementById("popupContent");
-      popupContent.textContent = message;
-      popupContent.className = `popup-content popup-${type}`;
-      popup.style.display = "flex";
-      setTimeout(() => popup.style.display = "none", 2500);
+      kirimBtn.disabled = false;
+      kirimBtn.textContent = "Kirim";
     }
-
-    // Jalankan load data awal
-    loadRelawan();
   </script>
 </body>
 </html>
-
-
-
-
-
