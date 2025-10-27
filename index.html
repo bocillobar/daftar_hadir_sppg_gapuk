@@ -1,109 +1,130 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Form Kehadiran Relawan</title>
+  <meta charset="UTF-8">
+  <title>Daftar Hadir Relawan SPPG GAPUK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", Arial, sans-serif;
-    }
-
     body {
-      background: linear-gradient(135deg, #007bff, #00c6ff);
+      font-family: "Inter", sans-serif;
+      background-color: #f0f2f5;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      padding: 30px;
     }
-
-    .iframe-container {
-      width: 100%;
-      max-width: 900px;
-      height: 95vh;
+    .container {
       background: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-      animation: fadeIn 0.8s ease-out;
-      position: relative;
-    }
-
-    iframe {
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      max-width: 420px;
       width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    footer {
-      position: fixed;
-      bottom: 10px;
-      font-size: 0.85em;
-      color: white;
       text-align: center;
-      opacity: 0.9;
     }
-
-    footer a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
-
-    footer a:hover {
-      text-decoration: underline;
+    button {
+      background: linear-gradient(to bottom, #0099ff, #007bff);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 12px;
+      width: 100%;
+      font-size: 1.1em;
+      cursor: pointer;
     }
-
-    /* Efek loading sebelum iframe muncul */
-    .loader {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.8);
-      z-index: 10;
+    .popup {
+      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      padding: 12px 20px; border-radius: 8px; color: white; font-weight: bold;
+      display: none;
     }
-
-    .spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #007bff;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .popup.success { background: #28a745; }
+    .popup.error { background: #dc3545; }
   </style>
 </head>
 <body>
-  <div class="iframe-container">
-    <div class="loader" id="loader">
-      <div class="spinner"></div>
-    </div>
+  <div class="container">
+    <h2>Daftar Hadir Relawan</h2>
+    <input type="text" id="nama" placeholder="Ketik nama..." list="listNama">
+    <datalist id="listNama"></datalist>
 
-    <!-- Ganti dengan URL Web App kamu -->
-    <iframe 
-      src="https://script.google.com/macros/s/AKfycbzfeGLhQMYFY-ZowJyU_KGsa-irhtEJdu6_V3PcqIZ62cr6xtKUJvZHAtXwJ55YvY8OKQ/exec" 
-      onload="document.getElementById('loader').style.display='none';">
-    </iframe>
+    <input type="text" id="jk" placeholder="Jenis Kelamin" readonly>
+    <input type="text" id="jabatan" placeholder="Jabatan" readonly>
+    <input type="text" id="nohp" placeholder="Nomor WhatsApp" readonly>
+    <textarea id="catatan" placeholder="Catatan (Opsional)"></textarea>
+
+    <button id="kirimBtn">Kirim</button>
   </div>
 
-  <footer>
-    <p>© 2025 <a href="https://wa.me/6285133371984" target="_blank">Muhammad Septi Rosidi</a></p>
-  </footer>
+  <div id="popup" class="popup"></div>
+
+  <script>
+    const WEB_APP_URL = "YOUR_WEB_APP_URL"; // <--- GANTI INI
+
+    let dataRelawan = {};
+
+    async function loadDataRelawan() {
+      try {
+        const res = await fetch(`${WEB_APP_URL}?action=getDataRelawan`);
+        const result = await res.json();
+        dataRelawan = result.dataMap;
+        const listNama = Object.keys(dataRelawan);
+        const datalist = document.getElementById("listNama");
+        datalist.innerHTML = listNama.map(n => `<option value="${n}">`).join('');
+      } catch (err) {
+        showPopup('error', 'Gagal memuat data relawan');
+      }
+    }
+
+    document.getElementById("nama").addEventListener("change", e => {
+      const nama = e.target.value.trim();
+      if (dataRelawan[nama]) {
+        const [n, jk, jab, hp] = dataRelawan[nama];
+        document.getElementById("jk").value = jk;
+        document.getElementById("jabatan").value = jab;
+        document.getElementById("nohp").value = hp;
+      }
+    });
+
+    document.getElementById("kirimBtn").addEventListener("click", async () => {
+      const nama = document.getElementById("nama").value.trim();
+      const jk = document.getElementById("jk").value;
+      const jabatan = document.getElementById("jabatan").value;
+      const nohp = document.getElementById("nohp").value;
+      const catatan = document.getElementById("catatan").value;
+
+      if (!nama || !jabatan || !nohp) {
+        showPopup('error', 'Data tidak lengkap');
+        return;
+      }
+
+      try {
+        const res = await fetch(https://script.google.com/macros/s/AKfycbyUpyxdRdeosGcezftryxrfbdAysd3Np_nytlT2aa8EVWT0CsY0rSXKAyT1qGNZohgIoA/exec, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nama, jk, jabatan, nohp, catatan })
+        });
+        const result = await res.json();
+        showPopup(result.status, result.message);
+      } catch (err) {
+        showPopup('error', 'Terjadi kesalahan jaringan');
+      }
+    });
+
+    function showPopup(type, msg) {
+      const pop = document.getElementById("popup");
+      pop.textContent = msg;
+      pop.className = `popup ${type}`;
+      pop.style.display = "block";
+      setTimeout(() => pop.style.display = "none", 3000);
+    }
+
+    loadDataRelawan();
+  </script>
 </body>
 </html>
