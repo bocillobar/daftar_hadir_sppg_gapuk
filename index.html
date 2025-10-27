@@ -1,64 +1,48 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Daftar Hadir Relawan SPPG GAPUK</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f6fb;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f7fb;
       margin: 0;
-      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
-
     .container {
       background: #fff;
-      padding: 40px 35px;
+      padding: 35px 30px;
       border-radius: 20px;
       box-shadow: 0 6px 25px rgba(0,0,0,0.08);
-      width: 360px;
+      width: 350px;
       text-align: center;
     }
-
     .logo {
       width: 80px;
       margin-bottom: 10px;
     }
-
     h2 {
-      font-size: 1.3rem;
-      margin: 8px 0 25px;
-      font-weight: 700;
-      color: #111827;
+      margin: 5px 0 20px;
+      font-size: 1.2rem;
     }
-
     input, textarea {
       width: 100%;
       padding: 12px;
+      margin: 10px 0;
       border-radius: 10px;
       border: 1px solid #ccc;
-      margin-bottom: 15px;
       font-size: 15px;
       box-sizing: border-box;
-      transition: all 0.2s ease;
     }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
-    }
-
     textarea {
       resize: none;
     }
-
     button {
       width: 100%;
       padding: 12px;
@@ -66,80 +50,65 @@
       border-radius: 10px;
       background: #2563eb;
       color: white;
-      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: 0.3s;
     }
-
-    button:hover {
-      background: #1e4ed8;
+    button:hover { background: #1e40af; }
+    button:disabled { background: #a0aec0; }
+    .footer {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 20px;
     }
-
-    button:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-    }
-
     .list-box {
       position: absolute;
       background: white;
       border: 1px solid #ccc;
       border-radius: 10px;
       width: 100%;
-      overflow: hidden; /* no scroll */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       display: none;
-      z-index: 100;
+      z-index: 10;
+      overflow: hidden;
     }
-
     .list-item {
-      padding: 10px 12px;
+      padding: 10px;
       cursor: pointer;
-      text-align: left;
-      transition: background 0.2s;
     }
-
     .list-item:hover {
       background: #f1f5ff;
     }
-
-    .footer {
-      font-size: 13px;
+    #loading {
+      font-size: 15px;
       color: #6b7280;
-      margin-top: 20px;
-    }
-
-    .footer a {
-      color: #2563eb;
-      text-decoration: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <img src="https://www.bgn.go.id/BGN_LOGO.png" class="logo" alt="Logo">
-    <h2>DAFTAR HADIR<br>RELAWAN SPPG GAPUK</h2>
+    <h2>DAFTAR HADIR RELAWAN SPPG GAPUK</h2>
 
-    <div style="position:relative;">
-      <input type="text" id="nama" placeholder="Ketik nama relawan..." autocomplete="off">
-      <div id="listBox" class="list-box"></div>
+    <div id="loading">Memuat data relawan...</div>
+
+    <div id="form" style="display:none;">
+      <div style="position:relative;">
+        <input type="text" id="nama" placeholder="Ketik nama relawan..." autocomplete="off">
+        <div id="listBox" class="list-box"></div>
+      </div>
+
+      <input type="text" id="jk" placeholder="Jenis Kelamin" readonly>
+      <input type="text" id="jabatan" placeholder="Posisi / Jabatan" readonly>
+      <input type="text" id="nohp" placeholder="Nomor WhatsApp" readonly>
+      <textarea id="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
+      <button id="kirimBtn" onclick="simpanData()" disabled>Kirim</button>
     </div>
 
-    <input type="text" id="jk" placeholder="Jenis Kelamin" readonly>
-    <input type="text" id="jabatan" placeholder="Posisi / Jabatan" readonly>
-    <input type="text" id="nohp" placeholder="Nomor WhatsApp" readonly>
-    <textarea id="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
-    <button id="kirimBtn" onclick="simpanData()" disabled>Kirim</button>
-
-    <div class="footer">
-      Created by <a href="https://github.com/muhammadseptirosidi" target="_blank">Muhammad Septi Rosidi</a>
-    </div>
+    <div class="footer">Created by <a href="https://github.com/muhammadseptirosidi">Muhammad Septi Rosidi</a></div>
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzWpAkOtnwpFApAoLSOMtKlKwnEIcakr4B8eU335c8Rzvx3XGNLvGTEAZwrW0JRHGzllg/exec";
-
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn2H9b0GUBt2dVXoBjDfc-iPz2cb29c5yuE55ObQOERxvV-byEVnICT00Jfp7QpO7xYQ/exec";
     let relawanList = [];
     let relawanData = {};
 
@@ -149,8 +118,10 @@
         const data = await res.json();
         relawanList = data.listNama;
         relawanData = data.dataMap;
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("form").style.display = "block";
       } catch (e) {
-        Swal.fire("Gagal", "Tidak dapat memuat data relawan.", "error");
+        document.getElementById("loading").textContent = "Gagal memuat data. Coba refresh.";
       }
     }
 
@@ -170,7 +141,7 @@
       if (!val) return listBox.style.display = "none";
 
       const filtered = relawanList.filter(n => n.toLowerCase().includes(val));
-      if (filtered.length === 0) return listBox.style.display = "none";
+      if (!filtered.length) return listBox.style.display = "none";
 
       filtered.forEach(nama => {
         const item = document.createElement("div");
@@ -194,10 +165,8 @@
       }
     }
 
-    document.addEventListener("click", (e) => {
-      if (!listBox.contains(e.target) && e.target !== namaInput) {
-        listBox.style.display = "none";
-      }
+    document.addEventListener("click", e => {
+      if (!listBox.contains(e.target) && e.target !== namaInput) listBox.style.display = "none";
     });
 
     async function simpanData() {
@@ -217,17 +186,16 @@
         const data = await res.json();
         Swal.fire({
           icon: data.status === "success" ? "success" : "error",
-          title: data.status === "success" ? "Berhasil!" : "Gagal",
+          title: data.status === "success" ? "Berhasil!" : "Gagal!",
           text: data.message,
           confirmButtonColor: "#2563eb"
         });
-
         if (data.status === "success") {
-          [namaInput, jkInput, jabatanInput, nohpInput, catatanInput].forEach(el => el.value = "");
+          [namaInput, jkInput, jabatanInput, nohpInput, catatanInput].forEach(e => e.value = "");
           kirimBtn.disabled = true;
         }
-      } catch (e) {
-        Swal.fire("Gagal", "Terjadi kesalahan saat mengirim data.", "error");
+      } catch {
+        Swal.fire("Gagal", "Tidak dapat mengirim data ke server.", "error");
       }
 
       kirimBtn.disabled = false;
