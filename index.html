@@ -1,210 +1,460 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Daftar Hadir Relawan SPPG Gapuk</title>
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/9/9d/Emblem_of_Indonesia_Garuda_Pancasila.svg" type="image/png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Daftar Hadir — Relawan SPPG GAPUK</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f6f9;
-      margin: 0;
-      padding: 0;
+    :root{
+      --bg: #F8FAFC;
+      --card: #ffffff;
+      --muted: #6B7280;
+      --text: #0F172A;
+      --primary: #3B82F6;
+      --primary-600: #2563EB;
+      --shadow: 0 10px 30px rgba(15,23,42,0.08);
+      --radius: 14px;
     }
-    .container {
-      max-width: 480px;
-      margin: 60px auto;
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--bg);
+      font-family:'Poppins',system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+    }
+
+    .card {
+      width:100%;
+      max-width:520px;
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:34px 36px;
+      position:relative;
+    }
+
+    .logo {
+      display:flex;
+      justify-content:center;
+      margin-bottom:8px;
+    }
+    .logo img {
+      width:72px;
+      height:auto;
+      display:block;
+    }
+
+    h1{
+      text-align:center;
+      margin:6px 0 4px;
+      font-size:22px;
+      color:var(--text);
+      letter-spacing:0.2px;
+      font-weight:700;
+    }
+    p.lead {
+      text-align:center;
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:13px;
+      font-weight:600;
+    }
+
+    form{margin-top:6px}
+    .field {
+      margin-bottom:14px;
+      position:relative;
+    }
+
+    input[type="text"], textarea {
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid #E6E9EE;
+      font-size:15px;
+      color:var(--text);
+      transition:box-shadow .15s, border-color .15s;
       background: #fff;
-      padding: 40px 30px;
-      border-radius: 24px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      text-align: center;
     }
-    img.logo {
-      width: 70px;
-      margin-bottom: 15px;
+
+    input[type="text"]:focus, textarea:focus {
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 6px 18px rgba(59,130,246,0.08);
     }
-    h1 {
-      font-size: 20px;
-      margin: 0;
-      color: #222;
+
+    textarea {
+      min-height:84px;
+      resize:vertical;
     }
-    h2 {
-      font-size: 18px;
-      margin-top: 5px;
-      color: #333;
-      font-weight: 600;
+
+    .btn {
+      display:inline-block;
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      background:var(--primary);
+      color:white;
+      text-align:center;
+      font-weight:700;
+      border:none;
+      cursor:pointer;
+      font-size:15px;
+      box-shadow:0 6px 18px rgba(59,130,246,0.12);
+      transition:transform .08s ease, background .15s;
     }
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 15px;
-    }
-    select {
-      appearance: none;
-      background-color: #fff;
-      cursor: pointer;
-    }
-    button {
-      background-color: #2c7be5;
-      color: white;
-      border: none;
-      padding: 14px;
-      width: 100%;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    button:hover {
-      background-color: #1a68d1;
-    }
+    .btn:active{ transform: translateY(1px); }
+    .btn[disabled]{ background:#9CA3AF; cursor:not-allowed; box-shadow:none; }
+
     .footer {
-      text-align: center;
-      font-size: 13px;
-      color: #666;
-      margin-top: 20px;
+      margin-top:18px;
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
     }
-    .footer a {
-      color: #2c7be5;
-      text-decoration: none;
+    .footer a{ color:var(--primary-600); text-decoration:none; font-weight:600; }
+
+    /* Autocomplete list (no scrollbar) */
+    .list {
+      position:absolute;
+      left:0;
+      right:0;
+      top:calc(100% + 8px);
+      background:#fff;
+      border-radius:10px;
+      border:1px solid #E6E9EE;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+      z-index:40;
+      overflow:visible; /* no scroll */
+      display:none;
     }
-    /* Notifikasi tengah */
+    .list.show { display:block; }
+
+    .list .item {
+      padding:12px 14px;
+      cursor:pointer;
+      text-align:left;
+      font-weight:600;
+      color:var(--text);
+      transition:background .12s;
+    }
+    .list .item:hover, .list .item.active { background:#F1F5FF; }
+
+    /* center toast/modal */
     .toast {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #222;
-      color: #fff;
-      padding: 20px 25px;
-      border-radius: 12px;
-      display: none;
-      font-size: 16px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-      z-index: 9999;
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      pointer-events:none;
+      z-index:9999;
     }
-    .show {
-      display: block !important;
-      animation: fadeInOut 3s ease-in-out;
+    .toast .box {
+      pointer-events:auto;
+      min-width:240px;
+      max-width:90%;
+      background:#0F172A;
+      color:#fff;
+      padding:16px 20px;
+      border-radius:12px;
+      box-shadow:0 10px 30px rgba(2,6,23,0.4);
+      text-align:center;
+      font-weight:600;
     }
-    @keyframes fadeInOut {
-      0% { opacity: 0; }
-      10%, 90% { opacity: 1; }
-      100% { opacity: 0; }
+    .toast.hide { display:none; }
+
+    /* spinner small */
+    .spinner {
+      display:inline-block;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,0.2);
+      border-top-color:rgba(255,255,255,0.95);
+      animation:spin 1s linear infinite;
+      vertical-align:middle;
+      margin-right:8px;
     }
-    datalist {
-      max-height: 300px;
-      overflow-y: auto;
+    @keyframes spin { to{ transform:rotate(360deg);} }
+
+    /* responsive */
+    @media (max-width:520px){
+      body{ padding:18px }
+      .card { padding:22px; border-radius:12px; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Logo_Badan_Gizi_Nasional.png" alt="Badan Gizi Nasional" class="logo">
-    <h1>DAFTAR HADIR</h1>
-    <h2>RELAWAN SPPG GAPUK</h2>
-    <form id="hadirForm">
-      <input list="namaList" id="nama" name="nama" placeholder="Cari nama relawan..." required autocomplete="off">
-      <datalist id="namaList"></datalist>
-
-      <input type="text" id="jk" name="jk" placeholder="Jenis Kelamin" readonly>
-      <input type="text" id="jabatan" name="jabatan" placeholder="Posisi/Jabatan" readonly>
-      <input type="text" id="nohp" name="nohp" placeholder="Nomor WhatsApp" readonly>
-      <textarea id="catatan" name="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
-
-      <button type="submit">Kirim</button>
-    </form>
-    <div class="footer">
-      Created by <a href="https://github.com/msrosidi" target="_blank">Muhammad Septi Rosidi</a>
+  <div class="card" role="main" aria-labelledby="title">
+    <div class="logo" aria-hidden="true">
+      <!-- If logo fails to load, alt text still present -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_Badan_Gizi_Nasional.svg/512px-Logo_Badan_Gizi_Nasional.svg.png" alt="Badan Gizi Nasional">
     </div>
+
+    <h1 id="title">DAFTAR HADIR</h1>
+    <p class="lead">RELAWAN SPPG GAPUK</p>
+
+    <form id="form">
+      <div class="field" style="margin-top:2px;">
+        <input id="nama" type="text" placeholder="Ketik nama relawan..." aria-label="Nama relawan" autocomplete="off" />
+        <div id="list" class="list" role="listbox" aria-label="Daftar nama"></div>
+      </div>
+
+      <div class="field">
+        <input id="jenisKelamin" type="text" placeholder="Jenis Kelamin" readonly aria-readonly="true" />
+      </div>
+
+      <div class="field">
+        <input id="posisi" type="text" placeholder="Posisi / Jabatan" readonly aria-readonly="true" />
+      </div>
+
+      <div class="field">
+        <input id="nomor" type="text" placeholder="Nomor WhatsApp" readonly aria-readonly="true" />
+      </div>
+
+      <div class="field">
+        <textarea id="catatan" placeholder="Tambahkan catatan jika perlu..."></textarea>
+      </div>
+
+      <div class="field">
+        <button id="submit" class="btn" type="submit" disabled><span id="btnText">Kirim</span></button>
+      </div>
+    </form>
+
+    <div class="footer">Created by <a href="https://github.com/bocillobar" target="_blank" rel="noopener">Muhammad Septi Rosidi</a></div>
   </div>
 
-  <div id="toast" class="toast"></div>
+  <!-- Toast / Mid-screen notification -->
+  <div id="toast" class="toast hide" aria-live="polite">
+    <div class="box" id="toastText">Pesan</div>
+  </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbEkLIILBvMFcmt6NZJEqIkuQGWpg2NcSNMVtxwi29xgAevgHOQPB41ah5kHPn4ltRPQ/exec?action=getDataRelawan
-";
-    let dataRelawan = {};
+    // ------------- CONFIG -------------
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbEkLIILBvMFcmt6NZJEqIkuQGWpg2NcSNMVtxwi29xgAevgHOQPB41ah5kHPn4ltRPQ/exec";
+    // ----------------------------------
 
-    async function loadRelawan() {
+    // Elements
+    const namaEl = document.getElementById('nama');
+    const listEl = document.getElementById('list');
+    const jkEl = document.getElementById('jenisKelamin');
+    const posisiEl = document.getElementById('posisi');
+    const nomorEl = document.getElementById('nomor');
+    const catatanEl = document.getElementById('catatan');
+    const submitBtn = document.getElementById('submit');
+    const btnText = document.getElementById('btnText');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+
+    let relawanList = [];     // array of names
+    let relawanMap = {};      // name -> object (headers -> values)
+    let filtered = [];        // filtered names currently displayed
+    let activeIndex = -1;     // for keyboard nav
+
+    // Helper: show toast
+    function showToast(message, duration = 2500) {
+      toastText.textContent = message;
+      toast.classList.remove('hide');
+      setTimeout(() => toast.classList.add('hide'), duration);
+    }
+
+    // Helper: safe field extractor (tolerant to header variations)
+    function getField(obj, keywords) {
+      if (!obj) return null;
+      const keys = Object.keys(obj);
+      const kLower = keys.map(k => k.toLowerCase());
+      for (const kw of keywords) {
+        const idx = kLower.findIndex(k => k.includes(kw));
+        if (idx !== -1) return obj[keys[idx]];
+      }
+      return null;
+    }
+
+    // Load data from Apps Script
+    async function loadData() {
+      // show small temporary placeholder while loading
+      namaEl.placeholder = 'Memuat daftar relawan...';
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=getDataRelawan`);
-        const result = await res.json();
-        if (result.status === "success") {
-          const namaList = document.getElementById("namaList");
-          dataRelawan = result.dataMap;
-
-          result.listNama.forEach(nama => {
-            const opt = document.createElement("option");
-            opt.value = nama;
-            namaList.appendChild(opt);
-          });
-        } else {
-          showToast("Gagal memuat data relawan ❌");
+        const res = await fetch(`${SCRIPT_URL}?action=getDataRelawan`, {cache: "no-store"});
+        const data = await res.json();
+        if (!data || data.status !== 'success') {
+          console.error('loadData error', data);
+          namaEl.placeholder = 'Gagal memuat daftar — refresh';
+          showToast('Gagal memuat data relawan');
+          return;
         }
+
+        // Expect data.listNama (array) and data.dataMap (object)
+        relawanList = Array.isArray(data.listNama) ? data.listNama.slice() : [];
+        relawanMap = data.dataMap || {};
+        namaEl.placeholder = 'Ketik nama relawan...';
       } catch (err) {
-        showToast("Tidak dapat memuat data relawan ❌");
         console.error(err);
+        namaEl.placeholder = 'Gagal memuat daftar — refresh';
+        showToast('Tidak dapat mengambil data relawan');
       }
     }
 
-    document.getElementById("nama").addEventListener("input", e => {
-      const nama = e.target.value.trim();
-      const data = dataRelawan[nama];
-      if (data) {
-        document.getElementById("jk").value = data["JENIS KELAMIN"] || "";
-        document.getElementById("jabatan").value = data["ALAMAT"] || "";
-        document.getElementById("nohp").value = "";
-      } else {
-        document.getElementById("jk").value = "";
-        document.getElementById("jabatan").value = "";
-        document.getElementById("nohp").value = "";
+    // Render filtered list (no scrollbar)
+    function renderList(names) {
+      listEl.innerHTML = '';
+      if (!names || names.length === 0) {
+        listEl.classList.remove('show');
+        return;
+      }
+      activeIndex = -1;
+      names.forEach((n, i) => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.textContent = n;
+        div.dataset.index = i;
+        div.addEventListener('click', () => selectByIndex(i));
+        listEl.appendChild(div);
+      });
+      // Show list
+      listEl.classList.add('show');
+      // Make sure list sits above other elements (no scroll intentionally)
+    }
+
+    // Select an item
+    function selectByIndex(i) {
+      const name = filtered[i];
+      if (!name) return;
+      namaEl.value = name;
+      listEl.classList.remove('show');
+      prefill(name);
+    }
+
+    // Prefill fields from relawanMap; tolerant header lookup
+    function prefill(name) {
+      const record = relawanMap[name] || {};
+      // common header keywords:
+      const jk = getField(record, ['jenis kelamin', 'jenis_kelamin', 'jk', 'gender']);
+      const jab = getField(record, ['jabatan','posisi','posisi/jabatan','posisi_jabatan','bagian']);
+      const phone = getField(record, ['whatsapp','nomor','no hp','no_hp','nomor whatsapp','nomor_whatsapp','hp']);
+
+      jkEl.value = jk || '';
+      posisiEl.value = jab || '';
+      // phone may contain dots or weird formatting; convert to string
+      nomorEl.value = phone ? String(phone) : '';
+      // enable submit only if we have a valid matched entry
+      submitBtn.disabled = !(name && (jk || jab || phone));
+    }
+
+    // Keyboard nav
+    namaEl.addEventListener('keydown', (ev) => {
+      const items = listEl.querySelectorAll('.item');
+      if (listEl.classList.contains('show')) {
+        if (ev.key === 'ArrowDown') {
+          ev.preventDefault();
+          activeIndex = Math.min(activeIndex + 1, items.length - 1);
+          updateActive(items);
+        } else if (ev.key === 'ArrowUp') {
+          ev.preventDefault();
+          activeIndex = Math.max(activeIndex - 1, 0);
+          updateActive(items);
+        } else if (ev.key === 'Enter') {
+          ev.preventDefault();
+          if (activeIndex >= 0) selectByIndex(activeIndex);
+        } else if (ev.key === 'Escape') {
+          listEl.classList.remove('show');
+        }
       }
     });
 
-    document.getElementById("hadirForm").addEventListener("submit", async e => {
-      e.preventDefault();
-      const formData = {
-        nama: document.getElementById("nama").value,
-        jk: document.getElementById("jk").value,
-        jabatan: document.getElementById("jabatan").value,
-        nohp: document.getElementById("nohp").value,
-        catatan: document.getElementById("catatan").value
+    function updateActive(items) {
+      items.forEach((it, idx) => it.classList.toggle('active', idx === activeIndex));
+      // ensure active visible (we purposely disable scrollbar — so we won't scroll)
+    }
+
+    // Autocomplete on input
+    namaEl.addEventListener('input', () => {
+      const q = namaEl.value.trim().toLowerCase();
+      if (!q) {
+        listEl.classList.remove('show');
+        submitBtn.disabled = true;
+        return;
+      }
+      filtered = relawanList.filter(n => n.toLowerCase().includes(q));
+      // show limited number visually but no scrollbar: we still place all items
+      renderList(filtered);
+    });
+
+    // Close list clicking outside
+    document.addEventListener('click', (ev) => {
+      if (!listEl.contains(ev.target) && ev.target !== namaEl) {
+        listEl.classList.remove('show');
+      }
+    });
+
+    // Submit handler (POST JSON)
+    document.getElementById('form').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const nama = namaEl.value.trim();
+      if (!nama) return showToast('Silakan pilih nama valid dari daftar');
+
+      // build data payload mapping to server expected keys
+      const payload = {
+        nama,
+        jenisKelamin: jkEl.value || '',
+        posisi: posisiEl.value || '',
+        nomorWA: nomorEl.value || '',
+        catatan: catatanEl.value || ''
       };
 
+      // disable button + spinner
+      submitBtn.disabled = true;
+      btnText.innerHTML = '<span class="spinner" aria-hidden="true"></span> Mengirim...';
+
       try {
-        const res = await fetch(`${SCRIPT_URL}?action=simpanKehadiran`, {
-          method: "POST",
-          body: JSON.stringify(formData)
+        const res = await fetch(SCRIPT_URL + '?action=simpanKehadiran', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
         });
-        const result = await res.json();
-        if (result.status === "success") {
-          showToast("✅ Data kehadiran berhasil disimpan!");
-          e.target.reset();
+        const j = await res.json();
+        if (j && j.status === 'success') {
+          showToast('✅ Data kehadiran berhasil disimpan!');
+          // reset form except keep loaded list
+          namaEl.value = '';
+          jkEl.value = '';
+          posisiEl.value = '';
+          nomorEl.value = '';
+          catatanEl.value = '';
+          submitBtn.disabled = true;
         } else {
-          showToast("❌ Gagal menyimpan data!");
+          console.error('save error', j);
+          showToast(j && j.message ? j.message : 'Gagal menyimpan data');
+          submitBtn.disabled = false;
         }
       } catch (err) {
         console.error(err);
-        showToast("Terjadi kesalahan saat mengirim data ❌");
+        showToast('Terjadi kesalahan saat mengirim data');
+        submitBtn.disabled = false;
+      } finally {
+        btnText.textContent = 'Kirim';
       }
     });
 
-    function showToast(msg) {
-      const toast = document.getElementById("toast");
-      toast.textContent = msg;
-      toast.className = "toast show";
-      setTimeout(() => toast.className = "toast", 3000);
-    }
-
-    loadRelawan();
+    // initialize
+    (async function init(){
+      submitBtn.disabled = true;
+      await loadData();
+      // small UX: when data ready, focus on name input
+      namaEl.focus();
+    })();
   </script>
 </body>
 </html>
-
